@@ -1,2 +1,2 @@
+rootProject.name = "SplitPaymentApp"
 include ':app'
-rootProject.name = "My Application"

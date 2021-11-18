@@ -1,4 +1,4 @@
-package com.app;
+package com.example.splitpaymentapp;
 
 import org.junit.Test;
 
