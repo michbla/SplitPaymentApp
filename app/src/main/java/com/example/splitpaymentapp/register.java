@@ -1,0 +1,178 @@
+package com.example.splitpaymentapp;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Pair;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+
+import java.io.IOException;
+
+public class register extends AppCompatActivity {
+
+    EditText fullName, email, passwd, passwd2;
+    Button registerButton;
+    TextView alternateLogin;
+    FirebaseAuth auth;
+    ProgressBar pbar;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_register);
+
+        initializeElements();
+
+        alternateLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Login.class));
+                finish();
+            }
+        });
+    }
+
+    private void initializeElements(){
+        fullName = findViewById(R.id.fullNameFieldRegister);
+        email = findViewById(R.id.emailFieldRegister);
+        passwd = findViewById(R.id.passwdFieldRegister);
+        passwd2 = findViewById(R.id.passwd2FieldRegister);
+        registerButton = findViewById(R.id.registerButton);
+        alternateLogin = findViewById(R.id.alternateLoginButton);
+        pbar = findViewById(R.id.registerProgressBar);
+        auth = FirebaseAuth.getInstance();
+
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            //String email, password;
+            //Pair<String, String> pair = parseFormData();
+            //email = pair.first;
+            //password = pair.second;
+
+                String _name = fullName.getText().toString().trim();
+                String _email = email.getText().toString().trim();
+                String _passwd = passwd.getText().toString().trim();
+                //System.out.printf(_name + " " + _email + " " + passwd);
+                String _passwd2 = passwd2.getText().toString().trim();
+
+
+
+                if (TextUtils.isEmpty(_name)) {
+                    fullName.setError("full name field cannot be empty!");
+                    return;
+                }
+
+                if (TextUtils.isEmpty(_email)){
+                    email.setError("email field cannot be empty!");
+                    return;
+                }
+
+                if (TextUtils.isEmpty(_passwd)){
+                    passwd.setError("password field cannot be empty!");
+                    return;
+                }
+
+                if (passwd.length()<8){
+                    passwd.setError("password must be 8 or more characters");
+                    return;
+                }
+
+                if (TextUtils.isEmpty(_passwd2)){
+                    passwd2.setError("password field cannot be empty!");
+                    return;
+                }
+
+                if (!TextUtils.equals(_passwd, _passwd2)){
+                    passwd2.setError("password mismatch");
+                    return;
+                }
+
+
+            pbar.setVisibility(View.VISIBLE);
+            try {
+                sendDataToFirebase(_email, _passwd);
+            }
+            catch (NullPointerException e){
+                System.err.println(e);
+            }
+
+            if (auth.getCurrentUser() !=null){
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                finish();
+            }
+
+            }
+        });
+    }
+
+    private Pair<String, String> parseFormData(){
+        String _name = fullName.getText().toString().trim();
+        String _email = email.getText().toString().trim();
+        String _passwd = passwd.getText().toString().trim();
+        System.out.printf(_name + " " + _email + " " + passwd);
+        String _passwd2 = passwd2.getText().toString().trim();
+
+
+
+        if (TextUtils.isEmpty(_name)) {
+            fullName.setError("full name field cannot be empty!");
+            return new Pair(null, null);
+        }
+
+        if (TextUtils.isEmpty(_email)){
+            email.setError("email field cannot be empty!");
+            return new Pair(null, null);
+        }
+
+        if (TextUtils.isEmpty(_passwd)){
+            passwd.setError("password field cannot be empty!");
+            return new Pair(null, null);
+        }
+
+        if (passwd.length()<8){
+            passwd.setError("password must be 8 or more characters");
+            return new Pair(null, null);
+        }
+
+        if (TextUtils.isEmpty(_passwd2)){
+            passwd2.setError("password field cannot be empty!");
+            return new Pair(null, null);
+        }
+
+        if (!TextUtils.equals(_passwd, _passwd2)){
+            passwd2.setError("password mismatch");
+            return new Pair(null, null);
+        }
+        return new Pair(_email, _passwd);
+    }
+
+    private void sendDataToFirebase(String email, String passwd){
+        auth.createUserWithEmailAndPassword(email, passwd).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()){
+                    Toast.makeText(register.this, "you have been registered", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(register.this, " xDError!" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+    }
+
+}

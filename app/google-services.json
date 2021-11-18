@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "401104614506",
+    "project_id": "splitpaymentapp",
+    "storage_bucket": "splitpaymentapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:401104614506:android:00ef26851c2361c0c58613",
+        "android_client_info": {
+          "package_name": "com.example.splitpaymentapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "401104614506-r08tclrv00cbr8gvjmbom755gfi0et13.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDF5MN3JluVg1lMLPSDeE5O3gJIDNgCEUA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "401104614506-r08tclrv00cbr8gvjmbom755gfi0et13.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
