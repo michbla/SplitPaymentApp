@@ -1,4 +1,4 @@
-package com.example.splitpaymentapp;
+package com.example.splitpaymentapp.view;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +13,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.splitpaymentapp.MainActivity;
+import com.example.splitpaymentapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -42,7 +44,7 @@ public class Login extends AppCompatActivity {
         alternateRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), register.class));
+                startActivity(new Intent(getApplicationContext(), Register.class));
             }
         });
     }

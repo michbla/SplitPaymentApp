@@ -1,4 +1,4 @@
-package com.example.splitpaymentapp;
+package com.example.splitpaymentapp.view;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,14 +14,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.splitpaymentapp.MainActivity;
+import com.example.splitpaymentapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.io.IOException;
-
-public class register extends AppCompatActivity {
+public class Register extends AppCompatActivity {
 
     EditText fullName, email, passwd, passwd2;
     Button registerButton;
@@ -165,10 +165,10 @@ public class register extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
-                    Toast.makeText(register.this, "you have been registered", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Register.this, "you have been registered", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    Toast.makeText(register.this, " xDError!" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Register.this, " xDError!" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
 
             }
