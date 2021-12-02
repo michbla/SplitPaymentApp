@@ -1,14 +1,16 @@
 package com.example.splitpaymentapp.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
-class Group implements IGroup {
+public class Group {
     private String groupName;
     private List<User> userList;
     private List<Payment> paymentList;
 
     public Group(String groupName, User owner) {
         this.groupName = groupName;
+        userList = new ArrayList<>();
         this.userList.add(owner);
     }
 
@@ -20,5 +22,11 @@ class Group implements IGroup {
         paymentList.add(payment);
     }
 
+    public String getGroupName() {
+        return groupName;
+    }
 
+    public List<User> getUserList() {
+        return userList;
+    }
 }

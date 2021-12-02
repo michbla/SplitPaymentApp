@@ -1,15 +1,23 @@
 package com.example.splitpaymentapp.model;
 
- class User {
+public class User {
+     private String Uid;
     private String fullName;
     private String email;
     private String password;
 
 
-    public User(String fullName, String email, String password) {
-        this.fullName = fullName;
+    public User() {
+        Uid="";
+        email="";
+        fullName="";
+    }
+
+    public User(String uid, String fullName, String email ) {
+        Uid = uid;
         this.email = email;
-        this.password = password;
+        this.fullName = fullName;
+
     }
 
     public String getFullName() {
@@ -20,11 +28,13 @@ package com.example.splitpaymentapp.model;
         return email;
     }
 
-    public String getPassword() {
-        return password;
-    }
+     public String getUid() {
+         return Uid;
+     }
 
-
-}
+     public void setFullName(String _fullname){
+        fullName = _fullname;
+     }
+ }
 
 

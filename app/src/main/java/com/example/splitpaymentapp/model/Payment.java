@@ -1,6 +1,6 @@
 package com.example.splitpaymentapp.model;
 
-class Payment implements IPayment {
+class Payment {
     private User paymentFrom;
     private User paymentTo;
     private float amount;

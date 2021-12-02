@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,8 +13,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.splitpaymentapp.MainActivity;
 import com.example.splitpaymentapp.R;
+import com.example.splitpaymentapp.model.Controller;
+import com.example.splitpaymentapp.model.IDbActions;
+import com.example.splitpaymentapp.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -26,8 +27,9 @@ public class Register extends AppCompatActivity {
     EditText fullName, email, passwd, passwd2;
     Button registerButton;
     TextView alternateLogin;
-    FirebaseAuth auth;
+    public FirebaseAuth auth;
     ProgressBar pbar;
+    Controller controller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,7 @@ public class Register extends AppCompatActivity {
         alternateLogin = findViewById(R.id.alternateLoginButton);
         pbar = findViewById(R.id.registerProgressBar);
         auth = FirebaseAuth.getInstance();
+        //controller.getInstance();
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,75 +107,85 @@ public class Register extends AppCompatActivity {
 
             pbar.setVisibility(View.VISIBLE);
             try {
-                sendDataToFirebase(_email, _passwd);
+                //sendDataToFirebase(_email, _passwd);
+                Controller.createUser(_email, _passwd, _name, new IDbActions.IRegisterUser() {
+                    @Override
+                    public void onCompleted(User user) {
+                        if (auth.getCurrentUser() !=null){
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            finish();
+                        }
+                    }
+                });
             }
             catch (NullPointerException e){
                 System.err.println(e);
             }
 
-            if (auth.getCurrentUser() !=null){
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                finish();
-            }
+
 
             }
         });
     }
 
-    private Pair<String, String> parseFormData(){
-        String _name = fullName.getText().toString().trim();
-        String _email = email.getText().toString().trim();
-        String _passwd = passwd.getText().toString().trim();
-        System.out.printf(_name + " " + _email + " " + passwd);
-        String _passwd2 = passwd2.getText().toString().trim();
+//    private Pair<String, String> parseFormData(){
+//        String _name = fullName.getText().toString().trim();
+//        String _email = email.getText().toString().trim();
+//        String _passwd = passwd.getText().toString().trim();
+//        System.out.printf(_name + " " + _email + " " + passwd);
+//        String _passwd2 = passwd2.getText().toString().trim();
+//
+//
+//
+//        if (TextUtils.isEmpty(_name)) {
+//            fullName.setError("full name field cannot be empty!");
+//            return new Pair(null, null);
+//        }
+//
+//        if (TextUtils.isEmpty(_email)){
+//            email.setError("email field cannot be empty!");
+//            return new Pair(null, null);
+//        }
+//
+//        if (TextUtils.isEmpty(_passwd)){
+//            passwd.setError("password field cannot be empty!");
+//            return new Pair(null, null);
+//        }
+//
+//        if (passwd.length()<8){
+//            passwd.setError("password must be 8 or more characters");
+//            return new Pair(null, null);
+//        }
+//
+//        if (TextUtils.isEmpty(_passwd2)){
+//            passwd2.setError("password field cannot be empty!");
+//            return new Pair(null, null);
+//        }
+//
+//        if (!TextUtils.equals(_passwd, _passwd2)){
+//            passwd2.setError("password mismatch");
+//            return new Pair(null, null);
+//        }
+//        return new Pair(_email, _passwd);
+//    }
 
-
-
-        if (TextUtils.isEmpty(_name)) {
-            fullName.setError("full name field cannot be empty!");
-            return new Pair(null, null);
-        }
-
-        if (TextUtils.isEmpty(_email)){
-            email.setError("email field cannot be empty!");
-            return new Pair(null, null);
-        }
-
-        if (TextUtils.isEmpty(_passwd)){
-            passwd.setError("password field cannot be empty!");
-            return new Pair(null, null);
-        }
-
-        if (passwd.length()<8){
-            passwd.setError("password must be 8 or more characters");
-            return new Pair(null, null);
-        }
-
-        if (TextUtils.isEmpty(_passwd2)){
-            passwd2.setError("password field cannot be empty!");
-            return new Pair(null, null);
-        }
-
-        if (!TextUtils.equals(_passwd, _passwd2)){
-            passwd2.setError("password mismatch");
-            return new Pair(null, null);
-        }
-        return new Pair(_email, _passwd);
-    }
-
-    private void sendDataToFirebase(String email, String passwd){
-        auth.createUserWithEmailAndPassword(email, passwd).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
-                    Toast.makeText(Register.this, "you have been registered", Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    Toast.makeText(Register.this, " xDError!" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        });
-    }
+//    private void sendDataToFirebase(String email, String passwd){
+//        auth.createUserWithEmailAndPassword(email, passwd).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+//            @Override
+//            public void onComplete(@NonNull Task<AuthResult> task) {
+//                if (task.isSuccessful()){
+//
+//                    User user = new User(auth.getUid().toString(), fullName.getText().toString(), email);
+//                    Controller.addUserToDb(user);
+//                    Toast.makeText(Register.this, "you have been registered", Toast.LENGTH_SHORT).show();
+//                }
+//                else{
+//                    Toast.makeText(Register.this, " xDError!" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+//                }
+//
+//            }
+//        });
+//
+//    }
 
 }

@@ -13,8 +13,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.splitpaymentapp.MainActivity;
 import com.example.splitpaymentapp.R;
+import com.example.splitpaymentapp.model.Controller;
+import com.example.splitpaymentapp.model.IDbActions;
+import com.example.splitpaymentapp.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -86,17 +88,28 @@ public class Login extends AppCompatActivity {
                     return;
                 }
 
-                auth.signInWithEmailAndPassword(_email, _passwd).addOnCompleteListener(Login.this,new  OnCompleteListener<AuthResult>() {
+//                auth.signInWithEmailAndPassword(_email, _passwd).addOnCompleteListener(Login.this,new  OnCompleteListener<AuthResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<AuthResult> task) {
+//                        if (task.isSuccessful()){
+//                            Toast.makeText(Login.this, "Logged in", Toast.LENGTH_SHORT).show();
+//                            Intent intent = new Intent(Login.this, MainActivity.class);
+//                            startActivity(intent);
+//                            finish();
+//                        }
+//                        else
+//                            Toast.makeText(Login.this, "Error Logging in", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+
+                Controller.loginUser(_email, _passwd, new IDbActions.ILoginUser() {
                     @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()){
-                            Toast.makeText(Login.this, "Logged in", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(Login.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
-                        else
-                            Toast.makeText(Login.this, "Error Logging in", Toast.LENGTH_SHORT).show();
+                    public void onCompleted(User user) {
+                        Toast.makeText(Login.this, "zalogowano!", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(Login.this, MainActivity.class);
+                        intent.putExtra("id", auth.getUid());
+                        startActivity(intent);
+                        finish();
                     }
                 });
 
