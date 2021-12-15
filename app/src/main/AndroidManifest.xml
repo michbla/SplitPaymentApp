@@ -9,21 +9,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SplitPaymentApp">
+        <activity
+            android:name=".view.GroupActivity"
+            android:exported="false" />
         <activity android:name=".view.Login">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-
             </intent-filter>
-
         </activity>
-        <activity android:name=".view.Register">
-        </activity>
-        <activity android:name=".view.MainActivity">
-
-        </activity>
+        <activity android:name=".view.Register"></activity>
+        <activity android:name=".view.MainActivity"></activity>
     </application>
 
 </manifest>

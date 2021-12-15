@@ -1,6 +1,5 @@
 package com.example.splitpaymentapp.view;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -11,15 +10,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.splitpaymentapp.R;
-import com.example.splitpaymentapp.model.Controller;
+import com.example.splitpaymentapp.model.DbActions;
 import com.example.splitpaymentapp.model.IDbActions;
 import com.example.splitpaymentapp.model.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class Register extends AppCompatActivity {
@@ -29,7 +24,7 @@ public class Register extends AppCompatActivity {
     TextView alternateLogin;
     public FirebaseAuth auth;
     ProgressBar pbar;
-    Controller controller;
+    DbActions dbActions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +51,7 @@ public class Register extends AppCompatActivity {
         alternateLogin = findViewById(R.id.alternateLoginButton);
         pbar = findViewById(R.id.registerProgressBar);
         auth = FirebaseAuth.getInstance();
-        //controller.getInstance();
+        //dbActions.getInstance();
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,7 +103,7 @@ public class Register extends AppCompatActivity {
             pbar.setVisibility(View.VISIBLE);
             try {
                 //sendDataToFirebase(_email, _passwd);
-                Controller.createUser(_email, _passwd, _name, new IDbActions.IRegisterUser() {
+                DbActions.createUser(_email, _passwd, _name, new IDbActions.IRegisterUser() {
                     @Override
                     public void onCompleted(User user) {
                         if (auth.getCurrentUser() !=null){
@@ -176,7 +171,7 @@ public class Register extends AppCompatActivity {
 //                if (task.isSuccessful()){
 //
 //                    User user = new User(auth.getUid().toString(), fullName.getText().toString(), email);
-//                    Controller.addUserToDb(user);
+//                    DbActions.addUserToDb(user);
 //                    Toast.makeText(Register.this, "you have been registered", Toast.LENGTH_SHORT).show();
 //                }
 //                else{

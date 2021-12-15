@@ -1,6 +1,5 @@
 package com.example.splitpaymentapp.view;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -14,12 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.splitpaymentapp.R;
-import com.example.splitpaymentapp.model.Controller;
+import com.example.splitpaymentapp.model.DbActions;
 import com.example.splitpaymentapp.model.IDbActions;
 import com.example.splitpaymentapp.model.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class Login extends AppCompatActivity {
@@ -40,7 +36,7 @@ public class Login extends AppCompatActivity {
 
         parseLoginData();
 
-        pbar.setVisibility(View.VISIBLE);
+        pbar.setVisibility(View.GONE);
 
 
         alternateRegisterButton.setOnClickListener(new View.OnClickListener() {
@@ -101,8 +97,8 @@ public class Login extends AppCompatActivity {
 //                            Toast.makeText(Login.this, "Error Logging in", Toast.LENGTH_SHORT).show();
 //                    }
 //                });
-
-                Controller.loginUser(_email, _passwd, new IDbActions.ILoginUser() {
+                pbar.setVisibility(View.VISIBLE);
+                DbActions.loginUser(_email, _passwd, new IDbActions.ILoginUser() {
                     @Override
                     public void onCompleted(User user) {
                         Toast.makeText(Login.this, "zalogowano!", Toast.LENGTH_SHORT).show();

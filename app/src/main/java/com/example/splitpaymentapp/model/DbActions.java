@@ -1,14 +1,10 @@
 package com.example.splitpaymentapp.model;
 
 
-import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.example.splitpaymentapp.view.Login;
-import com.example.splitpaymentapp.view.MainActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -19,27 +15,31 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class Controller {
+public class DbActions {
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    private static Controller controller;
+    private static DbActions dbActions;
     private static CollectionReference _users = db.collection("Users");
     private static CollectionReference _groups = db.collection("Groups");
     public static User bufferUser;
     public static FirebaseAuth auth = FirebaseAuth.getInstance();
 
-    private Controller() {
+    private DbActions() {
     }
 
-    public Controller getInstance() {
-        if (controller == null)
-            controller = new Controller();
-        return controller;
+    public DbActions getInstance() {
+        if (dbActions == null)
+            dbActions = new DbActions();
+        return dbActions;
     }
 
     public static void loginUser (String _email, String _passwd, IDbActions.ILoginUser ILoginUser){
@@ -71,7 +71,7 @@ public class Controller {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
                     User user = new User(auth.getUid().toString(), fullName, email);
-                    Controller.addUserToDb(user);
+                    DbActions.addUserToDb(user);
                     Log.w("createUser", "created user");
                     IRegisterUser.onCompleted(user);
                 }
@@ -106,7 +106,7 @@ public class Controller {
         });
     }
 
-    public static void createGroup(@NonNull User user, String _groupName, IDbActions.ICreateGroup IcreateGroup){
+    public static void createGroup(@NonNull User user, String _groupName, IDbActions.ICreateGroup ICreateGroup){
         Map<String, Object> groupData = new HashMap<>();
         groupData.put("groupName", _groupName);
         groupData.put("groupOwner", auth.getUid());
@@ -116,8 +116,28 @@ public class Controller {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                 Log.w("groupRegister", "grupa utworzona z id: " + _groups.document().getId());
-                IcreateGroup.onCompleted(new Group(_groupName, user));
+                ICreateGroup.onCompleted(new Group(_groupName, user));
 
+            }
+        });
+    }
+
+    public static void getUserGroups(String Uid, IDbActions.IBrowseGroup IBrowseGroup){
+        _groups.whereArrayContains("users", Uid).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                List<Group> groupList = new ArrayList<Group>();
+                if (task.isSuccessful()){
+                    Log.e("browseDB", "success");
+                    for (QueryDocumentSnapshot document: task.getResult()){
+                        Group g = document.toObject(Group.class);
+                        groupList.add(g);
+                    }
+                    IBrowseGroup.onCompleted(groupList);
+                }
+                else{
+                    Log.e("browseDB", "fail");
+                }
             }
         });
     }

@@ -1,5 +1,7 @@
 package com.example.splitpaymentapp.model;
 
+import java.util.List;
+
 public interface IDbActions{
 
      interface IAddUser {
@@ -16,6 +18,10 @@ public interface IDbActions{
 
     interface ICreateGroup{
          void onCompleted(Group group);
+    }
+
+    interface IBrowseGroup{
+         void onCompleted(List<Group> groupList);
     }
 }
 

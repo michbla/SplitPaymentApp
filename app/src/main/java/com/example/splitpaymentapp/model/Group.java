@@ -1,9 +1,10 @@
 package com.example.splitpaymentapp.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Group {
+public class Group implements Serializable {
     private String groupName;
     private List<User> userList;
     private List<Payment> paymentList;
@@ -13,6 +14,10 @@ public class Group {
         userList = new ArrayList<>();
         this.userList.add(owner);
     }
+
+    public Group(){
+        userList = new ArrayList<>();
+    };
 
     public void AddUser(User user){
         userList.add(user);
