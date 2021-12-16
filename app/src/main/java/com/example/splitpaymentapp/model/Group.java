@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Group implements Serializable {
+    private String Uid;
     private String groupName;
     private List<User> userList;
     private List<Payment> paymentList;
@@ -33,5 +34,13 @@ public class Group implements Serializable {
 
     public List<User> getUserList() {
         return userList;
+    }
+
+    public void setUid(String Uid){
+        this.Uid=Uid;
+    }
+
+    public String getUid() {
+        return Uid;
     }
 }

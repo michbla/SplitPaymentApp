@@ -23,6 +23,10 @@ public interface IDbActions{
     interface IBrowseGroup{
          void onCompleted(List<Group> groupList);
     }
+
+    interface IBrowseUsers{
+         void onCompleted(List<User> userList);
+    }
 }
 
 

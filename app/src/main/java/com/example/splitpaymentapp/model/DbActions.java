@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 
 public class DbActions {
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -131,6 +132,7 @@ public class DbActions {
                     Log.e("browseDB", "success");
                     for (QueryDocumentSnapshot document: task.getResult()){
                         Group g = document.toObject(Group.class);
+                        g.setUid(document.getId());
                         groupList.add(g);
                     }
                     IBrowseGroup.onCompleted(groupList);
@@ -142,6 +144,32 @@ public class DbActions {
         });
     }
 
+    public static void getUsersFromGroup(String groupUid, IDbActions.IBrowseUsers IBrowseUsers){
+        List<User> userList = new ArrayList<>();
+        CountDownLatch done = new CountDownLatch(1);
+        _groups.document(groupUid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot document = task.getResult();
+                List<String> users = (List<String>) document.get("users");
+
+                for (String s:users) {
+                    getUserFromDb(s, new IDbActions.IAddUser() {
+                        @Override
+                        public void onCompleted(User user) {
+                            userList.add(user);
+
+                        }
+                    });
+                    done.countDown();
+                    IBrowseUsers.onCompleted(userList);
+                    Log.e("userFetchSuccess", s);
+                }
+
+            }
+        });
+
+    }
 
 }
 
