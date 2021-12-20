@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -152,20 +153,14 @@ public class DbActions {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 DocumentSnapshot document = task.getResult();
                 List<String> users = (List<String>) document.get("users");
-
-                for (String s:users) {
-                    getUserFromDb(s, new IDbActions.IAddUser() {
-                        @Override
-                        public void onCompleted(User user) {
-                            userList.add(user);
-
-                        }
-                    });
-                    done.countDown();
-                    IBrowseUsers.onCompleted(userList);
-                    Log.e("userFetchSuccess", s);
-                }
-
+                _users.whereIn(FieldPath.documentId(), users).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        QuerySnapshot document = task.getResult();
+                        userList.addAll(document.toObjects(User.class));
+                        IBrowseUsers.onCompleted(userList);
+                    }
+                });
             }
         });
 
