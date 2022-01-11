@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.splitpaymentapp.R;
+import com.example.splitpaymentapp.model.DbActions;
 import com.example.splitpaymentapp.model.Payment;
 import com.example.splitpaymentapp.model.User;
 
@@ -55,7 +56,8 @@ public class PaymentActivity extends AppCompatActivity {
                 for (int i=0;i<list.size();i++){
                     User x = (User) users.get(i);
                     payments.add(new Payment(x.getUid(), userId, adapter.amounts.get(i)));
-                    Log.e("xddd", new StringBuilder(x.getUid() + " " +userId + " " + adapter.amounts.get(i)).toString());
+                    Log.e("xddd", new StringBuilder(payments.get(i).getPaymentFrom() + " " + payments.get(i).getAmount()).toString());
+                    DbActions.addPayment(payments.get(i));
                 }
 
             }

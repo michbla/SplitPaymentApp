@@ -32,6 +32,7 @@ public class DbActions {
     private static DbActions dbActions;
     private static CollectionReference _users = db.collection("Users");
     private static CollectionReference _groups = db.collection("Groups");
+    private static CollectionReference _payments = db.collection("Payments");
     public static User bufferUser;
     public static FirebaseAuth auth = FirebaseAuth.getInstance();
 
@@ -93,7 +94,9 @@ public class DbActions {
         _users.document(user.getUid()).set(userMap);
     }
 
-
+    public static void addPayment(@NonNull Payment payment){
+        _payments.add(payment);
+    }
 
 
     public static void getUserFromDb(@NonNull String Uid, IDbActions.IAddUser interFace) {

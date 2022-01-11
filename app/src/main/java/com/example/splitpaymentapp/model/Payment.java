@@ -11,8 +11,16 @@ public class Payment {
         this.amount = amount;
 
     }
-        public float getAmount(){
-            return amount;
-        }
 
+    public float getAmount(){
+        return amount;
+    }
+
+    public String getPaymentFrom() {
+        return paymentFrom;
+    }
+
+    public String getPaymentTo() {
+        return paymentTo;
+    }
 }
