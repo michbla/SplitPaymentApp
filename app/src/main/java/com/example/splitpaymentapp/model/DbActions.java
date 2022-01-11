@@ -94,6 +94,8 @@ public class DbActions {
     }
 
 
+
+
     public static void getUserFromDb(@NonNull String Uid, IDbActions.IAddUser interFace) {
         _users.document(Uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -112,7 +114,7 @@ public class DbActions {
         Map<String, Object> groupData = new HashMap<>();
         groupData.put("groupName", _groupName);
         groupData.put("groupOwner", auth.getUid());
-        groupData.put("users", FieldValue.arrayUnion(auth.getUid()));
+        //groupData.put("users", FieldValue.arrayUnion(auth.getUid()));
         Log.e("debugData", _groupName + " " + auth.getUid() + " " + Arrays.asList(auth.getUid()));
         _groups.add(groupData).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
@@ -125,7 +127,7 @@ public class DbActions {
     }
 
     public static void getUserGroups(String Uid, IDbActions.IBrowseGroup IBrowseGroup){
-        _groups.whereArrayContains("users", Uid).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        _groups.whereEqualTo("groupOwner", Uid).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 List<Group> groupList = new ArrayList<Group>();

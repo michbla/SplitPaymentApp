@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent groupViewIntent = new Intent(MainActivity.this, GroupActivity.class);
                 Group g = groupArrayList.get(position);
                 groupViewIntent.putExtra("group", g);
+                groupViewIntent.putExtra("user", userId);
                 startActivity(groupViewIntent);
                 finish();
             }

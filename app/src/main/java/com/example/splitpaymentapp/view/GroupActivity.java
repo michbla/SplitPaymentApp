@@ -28,6 +28,7 @@ public class GroupActivity extends AppCompatActivity {
     Group group;
     ListView usersLV;
     FloatingActionButton addExpenseButton;
+    String userId;
 
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog alertDialog;
@@ -39,6 +40,7 @@ public class GroupActivity extends AppCompatActivity {
         init();
         try{
             group = (Group) getIntent().getSerializableExtra("group");
+            userId = (String) getIntent().getSerializableExtra("user");
             Log.e("GroupSuccess", "fetched group with name: " + group.getGroupName());
         }
         catch (Exception e){
@@ -53,6 +55,7 @@ public class GroupActivity extends AppCompatActivity {
                         Intent paymentIntent = new Intent(GroupActivity.this, PaymentActivity.class);
                         Bundle bundle = new Bundle();
                         paymentIntent.putParcelableArrayListExtra("u", users);
+                        paymentIntent.putExtra("user", userId);
                         startActivity(paymentIntent);
 
                     }
@@ -69,7 +72,7 @@ public class GroupActivity extends AppCompatActivity {
 
                 for (User u: users) {
                     userString.add(u.getFullName());
-                    Log.e("groupActivity", u.getFullName());
+                    Log.e("groupActivity", u.getUid());
                 }
                 ArrayAdapter<String> ad = new ArrayAdapter<>(
                         GroupActivity.this,

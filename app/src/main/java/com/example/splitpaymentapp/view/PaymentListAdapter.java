@@ -5,15 +5,18 @@ package com.example.splitpaymentapp.view;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.splitpaymentapp.R;
+import com.example.splitpaymentapp.model.Payment;
 import com.example.splitpaymentapp.model.User;
 
 import java.util.ArrayList;
@@ -25,10 +28,14 @@ public class PaymentListAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<User> list;
     LayoutInflater inflater;
+    protected ArrayList<Float> amounts = new ArrayList<>();
 
     public PaymentListAdapter(Context context, ArrayList<User> list) {
         this.context = context;
         this.list = list;
+        for(int i=0;i<list.size();i++){
+            amounts.add(0f);
+        }
     }
 
     @Override
@@ -38,7 +45,8 @@ public class PaymentListAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return position;
+
+        return list.get(position);
     }
 
     @Override
@@ -58,7 +66,6 @@ public class PaymentListAdapter extends BaseAdapter {
             holder.textView = (TextView) convertView.findViewById(R.id.nameTV);
             holder.editText.setTag(position);
             holder.textView.setTag(position);
-            holder.editText.setText("0,00zł");
             holder.textView.setText(list.get(position).getFullName());
 
             convertView.setTag(holder);
@@ -74,7 +81,6 @@ public class PaymentListAdapter extends BaseAdapter {
         holder.editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -82,13 +88,15 @@ public class PaymentListAdapter extends BaseAdapter {
                 final int position2 = holder.editText.getId();
                 final EditText text = holder.editText;
                 if (text.getText().toString().length()>0){
-//                    list.set(position);
+                    Log.e("position2", String.valueOf(position2));
+                    amounts.set(position2, Float.parseFloat(text.getText().toString()));
                     //TODO dodać dalej płatności
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+                Toast.makeText(context,holder.editText.getText().toString(), Toast.LENGTH_SHORT).show();
 
             }
         });
