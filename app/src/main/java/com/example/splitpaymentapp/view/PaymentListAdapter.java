@@ -1,0 +1,100 @@
+package com.example.splitpaymentapp.view;
+
+
+
+import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.splitpaymentapp.R;
+import com.example.splitpaymentapp.model.User;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class PaymentListAdapter extends BaseAdapter {
+
+
+    private Context context;
+    private ArrayList<User> list;
+    LayoutInflater inflater;
+
+    public PaymentListAdapter(Context context, ArrayList<User> list) {
+        this.context = context;
+        this.list = list;
+    }
+
+    @Override
+    public int getCount() {
+        return list.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return position;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        final PaymentViewHolder holder;
+        convertView = null;
+        if (convertView == null){
+            holder = new PaymentViewHolder();
+            inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.paymentlist_adapter, null);
+            holder.editText = (EditText) convertView.findViewById(R.id.amountET);
+            holder.textView = (TextView) convertView.findViewById(R.id.nameTV);
+            holder.editText.setTag(position);
+            holder.textView.setTag(position);
+            holder.editText.setText("0,00zł");
+            holder.textView.setText(list.get(position).getFullName());
+
+            convertView.setTag(holder);
+        }
+        else{
+            holder = (PaymentViewHolder) convertView.getTag();
+        }
+
+        int tag_position = (Integer) holder.editText.getTag();
+        holder.editText.setId(tag_position);
+        holder.textView.setId(tag_position);
+
+        holder.editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                final int position2 = holder.editText.getId();
+                final EditText text = holder.editText;
+                if (text.getText().toString().length()>0){
+//                    list.set(position);
+                    //TODO dodać dalej płatności
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        return convertView;
+    }
+
+}
+
+
