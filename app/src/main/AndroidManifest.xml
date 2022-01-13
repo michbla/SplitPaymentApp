@@ -15,6 +15,9 @@
             android:exported="false" />
         <activity
             android:name=".view.GroupActivity"
+            android:launchMode="singleInstance"
+
+            android:clearTaskOnLaunch="true"
             android:exported="false" />
         <activity android:name=".view.Login" >
             <intent-filter>
@@ -24,7 +27,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.Register" />
-        <activity android:name=".view.MainActivity" />
+        <activity android:name=".view.MainActivity"
+            android:launchMode="singleTask"
+
+            android:clearTaskOnLaunch="true"
+            />
 
     </application>
 

@@ -14,7 +14,6 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -94,10 +93,6 @@ public class DbActions {
         _users.document(user.getUid()).set(userMap);
     }
 
-    public static void addPayment(@NonNull Payment payment){
-        _payments.add(payment);
-    }
-
 
     public static void getUserFromDb(@NonNull String Uid, IDbActions.IAddUser interFace) {
         _users.document(Uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -123,8 +118,28 @@ public class DbActions {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                 Log.w("groupRegister", "grupa utworzona z id: " + _groups.document().getId());
-                ICreateGroup.onCompleted(new Group(_groupName, user));
+                ICreateGroup.onCompleted(new Group(_groupName, user, auth.getUid()));
 
+            }
+        });
+    }
+
+    public static void addPayment(@NonNull Payment payment){
+        _payments.add(payment);
+    }
+
+    public static void getPaymentsFromDb(@NonNull String groupId, IDbActions.IBrowsePayments IBrowsePayments){
+        _payments.whereEqualTo("groupId", groupId).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                List<Payment> paymentList = new ArrayList<Payment>();
+                if(task.isSuccessful()){
+                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
+                        Payment p = documentSnapshot.toObject(Payment.class);
+                        paymentList.add(p);
+                    }
+                    IBrowsePayments.onCompleted(paymentList);
+                }
             }
         });
     }

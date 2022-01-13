@@ -15,7 +15,6 @@ import com.example.splitpaymentapp.model.Payment;
 import com.example.splitpaymentapp.model.User;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class PaymentActivity extends AppCompatActivity {
@@ -27,6 +26,7 @@ public class PaymentActivity extends AppCompatActivity {
     private PaymentListAdapter adapter;
     private Button makePaymentButton;
     private String userId;
+    private String groupId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +35,7 @@ public class PaymentActivity extends AppCompatActivity {
         Intent usersBundle = getIntent();
         users.addAll(usersBundle.getParcelableArrayListExtra("u"));
         userId = usersBundle.getStringExtra("user");
+        groupId = usersBundle.getStringExtra("groupId");
         Log.e("xd", userId);
         init();
 
@@ -49,15 +50,16 @@ public class PaymentActivity extends AppCompatActivity {
 
         adapter = new PaymentListAdapter(this, users);
         lv.setAdapter(adapter);
-        lv.getAdapter().getItem(0);
         makePaymentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 for (int i=0;i<list.size();i++){
                     User x = (User) users.get(i);
-                    payments.add(new Payment(x.getUid(), userId, adapter.amounts.get(i)));
-                    Log.e("xddd", new StringBuilder(payments.get(i).getPaymentFrom() + " " + payments.get(i).getAmount()).toString());
-                    DbActions.addPayment(payments.get(i));
+                    payments.add(new Payment(groupId, x.getUid(), userId, adapter.amounts.get(i)));
+                    if (adapter.amounts.get(i)>0f) {
+//                      Log.e("xddd", new StringBuilder(payments.get(i).getPaymentFrom() + " " + payments.get(i).getAmount()).toString());
+                        DbActions.addPayment(payments.get(i));
+                    }
                 }
 
             }

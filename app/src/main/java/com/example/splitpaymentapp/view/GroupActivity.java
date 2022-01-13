@@ -1,12 +1,11 @@
 package com.example.splitpaymentapp.view;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -18,7 +17,6 @@ import com.example.splitpaymentapp.model.IDbActions;
 import com.example.splitpaymentapp.model.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,15 +27,13 @@ public class GroupActivity extends AppCompatActivity {
     ListView usersLV;
     FloatingActionButton addExpenseButton;
     String userId;
-
-    private AlertDialog.Builder dialogBuilder;
-    private AlertDialog alertDialog;
+    GroupListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
-        init();
+
         try{
             group = (Group) getIntent().getSerializableExtra("group");
             userId = (String) getIntent().getSerializableExtra("user");
@@ -46,6 +42,7 @@ public class GroupActivity extends AppCompatActivity {
         catch (Exception e){
             Log.e("GroupFatal", "failed to fetch Group");
         }
+        init();
         fillUserList();
 
         addExpenseButton.setOnClickListener(
@@ -56,6 +53,7 @@ public class GroupActivity extends AppCompatActivity {
                         Bundle bundle = new Bundle();
                         paymentIntent.putParcelableArrayListExtra("u", users);
                         paymentIntent.putExtra("user", userId);
+                        paymentIntent.putExtra("groupId",group.getUid());
                         startActivity(paymentIntent);
 
                     }
@@ -79,9 +77,18 @@ public class GroupActivity extends AppCompatActivity {
                         android.R.layout.simple_list_item_1,
                         userString
                 );
-                usersLV.setAdapter(ad);
+                PaymentCalculator calc = new PaymentCalculator(users, group.getUid(), userId);
+                calc.MapPayments(new IPaymentCalculator.IMapPayments() {
+                    @Override
+                    public void onCompleted(List<Pair<User, Float>> map) {
+                        adapter = new GroupListAdapter(GroupActivity.this, users, map);
+                        usersLV.setAdapter(adapter);
+                    }
+                });
+
             }
         });
+
 
     }
 

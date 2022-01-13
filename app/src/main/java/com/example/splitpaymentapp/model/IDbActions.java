@@ -27,6 +27,10 @@ public interface IDbActions{
     interface IBrowseUsers{
          void onCompleted(List<User> userList);
     }
+
+    interface IBrowsePayments{
+         void onCompleted(List<Payment> payments);
+    }
 }
 
 

@@ -7,11 +7,13 @@ import java.util.List;
 public class Group implements Serializable {
     private String Uid;
     private String groupName;
+    private String groupOwner;
     private List<User> userList;
     private List<Payment> paymentList;
 
-    public Group(String groupName, User owner) {
+    public Group(String groupName, User owner, String groupOwner) {
         this.groupName = groupName;
+        this.groupOwner = groupOwner;
         userList = new ArrayList<>();
         this.userList.add(owner);
     }
