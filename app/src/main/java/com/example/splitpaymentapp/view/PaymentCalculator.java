@@ -54,6 +54,10 @@ public class PaymentCalculator {
                 for (int i=0;i<users.size();i++){
                     amountBuf = 0;
                     String currUserId = users.get(i).getUid();
+                    if (currUserId.equals(userId)) {
+                        users.remove(i);
+                        i--;
+                    }
                     for (int j=0;j<payments.size();j++){
                         Payment buf = payments.get(j);
                          if (currUserId.equals(buf.getPaymentFrom()) || currUserId.equals(buf.getPaymentTo())){

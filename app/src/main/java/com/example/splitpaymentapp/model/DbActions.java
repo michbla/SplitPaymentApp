@@ -145,7 +145,7 @@ public class DbActions {
     }
 
     public static void getUserGroups(String Uid, IDbActions.IBrowseGroup IBrowseGroup){
-        _groups.whereEqualTo("groupOwner", Uid).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        _groups.whereArrayContains("users", Uid).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 List<Group> groupList = new ArrayList<Group>();
