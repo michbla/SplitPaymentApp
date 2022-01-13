@@ -90,11 +90,9 @@ public class PaymentListAdapter extends BaseAdapter {
                 if (text.getText().toString().length()>0){
                     Log.e("position2", String.valueOf(position2));
                     amounts.set(position2, Float.parseFloat(text.getText().toString()));
-                    //TODO pobieranie płatności
-                    //TODO sumowanie płatności
-                    //TODO wypisywanie należności w groupActivity
                     //TODO dodawanie użytkowników
                     //TODO ??równy podział płatności??
+                    //TODO naprawić bug gdzie wywala outOfRange gdy tylko owner jest w grupie
                 }
             }
 

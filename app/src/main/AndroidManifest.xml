@@ -15,9 +15,7 @@
             android:exported="false" />
         <activity
             android:name=".view.GroupActivity"
-            android:launchMode="singleInstance"
 
-            android:clearTaskOnLaunch="true"
             android:exported="false" />
         <activity android:name=".view.Login" >
             <intent-filter>

@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Bundle id = getIntent().getExtras();
-
         try{
             userId = id.getString("id");
             Log.e("MainSuccess", "fetched id: " + userId);
@@ -45,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
         catch (Exception e){
             Log.e("MainFatal", "failed to fetch Uid");
         }
+
+
+
         init();
 
         // DbActions.getUserFromDb("p1MXrSYJSEgFb9s8yfzcgYoypi03");
@@ -71,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
                 groupViewIntent.putExtra("group", g);
                 groupViewIntent.putExtra("user", userId);
                 startActivity(groupViewIntent);
-                finish();
             }
         });
 

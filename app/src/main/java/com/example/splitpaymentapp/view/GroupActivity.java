@@ -61,6 +61,7 @@ public class GroupActivity extends AppCompatActivity {
         );
     }
 
+
     private void fillUserList(){
         List<String> userString = new ArrayList<>();
         DbActions.getUsersFromGroup(group.getUid(), new IDbActions.IBrowseUsers() {
