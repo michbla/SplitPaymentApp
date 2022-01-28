@@ -59,6 +59,8 @@ public class PaymentActivity extends AppCompatActivity {
                 equalPayActivity.putExtra("date", date.toString());
                 equalPayActivity.putExtra("amount", amount);
                 equalPayActivity.putExtra("payName", name);
+                equalPayActivity.putExtra("groupId", groupId);
+                equalPayActivity.putExtra("userId", userId);
                 startActivity(equalPayActivity);
             }
         });

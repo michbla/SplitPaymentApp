@@ -1,7 +1,8 @@
 package com.example.splitpaymentapp.model;
 
 public class Payment {
-    private String groupId;
+    private String receiptId;
+    private String paymentId;
     private String paymentFrom;
     private String paymentTo;
     private float amount;
@@ -9,8 +10,9 @@ public class Payment {
     public Payment() {
     }
 
-    public Payment(String groupId, String paymentFrom, String paymentTo, float amount) {
-        this.groupId = groupId;
+    public Payment(String receiptId, String paymentId, String paymentFrom, String paymentTo, float amount) {
+        this.receiptId = receiptId;
+        this.paymentId = paymentId;
         this.paymentFrom = paymentFrom;
         this.paymentTo = paymentTo;
         this.amount = amount;
@@ -29,7 +31,9 @@ public class Payment {
         return paymentTo;
     }
 
-    public String getGroupId() {
-        return groupId;
+    public String getReceiptId() { return receiptId; }
+
+    public String getPaymentId() {
+        return paymentId;
     }
 }

@@ -32,6 +32,7 @@ public class DbActions {
     private static CollectionReference _users = db.collection("Users");
     private static CollectionReference _groups = db.collection("Groups");
     private static CollectionReference _payments = db.collection("Payments");
+    private static CollectionReference _receipts = db.collection("Receipts");
     public static User bufferUser;
     public static FirebaseAuth auth = FirebaseAuth.getInstance();
 
@@ -127,6 +128,8 @@ public class DbActions {
     public static void addPayment(@NonNull Payment payment){
         _payments.add(payment);
     }
+
+    public static void addReceipt(@NonNull Receipt receipt) {_receipts.add(receipt); }
 
     public static void getPaymentsFromDb(@NonNull String groupId, IDbActions.IBrowsePayments IBrowsePayments){
         _payments.whereEqualTo("groupId", groupId).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
