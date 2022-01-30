@@ -11,7 +11,7 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="682dp">
+        tools:layout_editor_absoluteY="616dp">
 
         <CheckBox
             android:id="@+id/isPayingCB"

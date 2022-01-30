@@ -14,6 +14,7 @@ import com.example.splitpaymentapp.R;
 import com.example.splitpaymentapp.model.DbActions;
 import com.example.splitpaymentapp.model.Group;
 import com.example.splitpaymentapp.model.IDbActions;
+import com.example.splitpaymentapp.model.Receipt;
 import com.example.splitpaymentapp.model.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -24,10 +25,14 @@ public class GroupActivity extends AppCompatActivity {
 
     ArrayList<User> users = new ArrayList<>();
     Group group;
-    ListView usersLV;
+    ListView receiptLV;
     FloatingActionButton addExpenseButton;
     String userId;
-    GroupListAdapter adapter;
+    ReceiptListAdapter adapter;
+
+    List<Receipt> receiptList = new ArrayList<>();
+    String receiptName, receiptDate;
+    float receiptValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,23 +83,24 @@ public class GroupActivity extends AppCompatActivity {
                         android.R.layout.simple_list_item_1,
                         userString
                 );
-                PaymentCalculator calc = new PaymentCalculator(users, group.getUid(), userId);
-                calc.MapPayments(new IPaymentCalculator.IMapPayments() {
-                    @Override
-                    public void onCompleted(List<Pair<User, Float>> map) {
-                        adapter = new GroupListAdapter(GroupActivity.this, users, map);
-                        usersLV.setAdapter(adapter);
-                    }
-                });
+
 
             }
         });
+        DbActions.browseReceipts(group.getUid(), new IDbActions.IBrowseReceipts() {
+            @Override
+            public void onCompleted(List<Receipt> receipts) {
+                receiptList.addAll(receipts);
 
+                adapter = new ReceiptListAdapter(GroupActivity.this, receipts);
+                receiptLV.setAdapter(adapter);
+            }
+        });
 
     }
 
     private void init(){
-        usersLV = findViewById(R.id.usersListView);
+        receiptLV = findViewById(R.id.usersListView);
         addExpenseButton = findViewById(R.id.addExpenseFloatingButton);
     }
 

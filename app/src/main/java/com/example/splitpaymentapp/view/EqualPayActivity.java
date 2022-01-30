@@ -6,20 +6,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.splitpaymentapp.R;
 import com.example.splitpaymentapp.model.DbActions;
-import com.example.splitpaymentapp.model.Group;
 import com.example.splitpaymentapp.model.Payment;
 import com.example.splitpaymentapp.model.Receipt;
 import com.example.splitpaymentapp.model.User;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,7 +40,7 @@ public class EqualPayActivity extends AppCompatActivity {
         users.addAll(usersBundle.getParcelableArrayListExtra("u"));
         amount = usersBundle.getFloatExtra("amount", 0);
         date = usersBundle.getStringExtra("date");
-        name = usersBundle.getStringExtra("name");
+        name = usersBundle.getStringExtra("payName");
         groupId = usersBundle.getStringExtra("groupId");
         userId = usersBundle.getStringExtra("userId");
 
@@ -64,8 +61,11 @@ public class EqualPayActivity extends AppCompatActivity {
                         payments.add(new Payment(receiptId, paymentId, userId, users.get(i).getUid(), adapter.subAmounts.get(i)));
                     }
                 }
-                Receipt rc = new Receipt(receiptId, groupId, adapter.amount, payments);
+                Receipt rc = new Receipt(receiptId, groupId, adapter.amount, payments, name, date);
                 DbActions.addReceipt(rc);
+                for (Payment x: payments) {
+                    DbActions.addPayment(x);
+                }
                 Log.e("ADDPAY CLICK" ,"finished");
             }
         });
@@ -80,4 +80,4 @@ public class EqualPayActivity extends AppCompatActivity {
 
 }
 
-//TODO dodać nazwe paragonu do klasy 
+//TODO dodać nazwe paragonu do klasy

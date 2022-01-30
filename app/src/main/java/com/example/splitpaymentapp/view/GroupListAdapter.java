@@ -22,51 +22,23 @@ public class GroupListAdapter extends BaseAdapter {
     protected ArrayList<Float> amounts = new ArrayList<>();
     protected List<Pair<User, Float>> map;
 
-    public GroupListAdapter(Context context, ArrayList<User> users, List<Pair<User, Float>> map) {
-        this.context = context;
-        this.users = users;
-        for(int i=0;i<users.size();i++){
-            amounts.add(0f);
-        }
-        this.map = map;
-    }
-
     @Override
     public int getCount() {
-        return users.size();
+        return 0;
     }
 
     @Override
     public Object getItem(int position) {
-        return users.get(position);
+        return null;
     }
 
     @Override
     public long getItemId(int position) {
-        return position;
+        return 0;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final GroupViewHolder holder;
-        convertView = null;
-        if (convertView == null){
-            holder = new GroupViewHolder();
-            inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.grouplist_adapter, null);
-            holder.userTV = (TextView) convertView.findViewById(R.id.groupUsernameTV);
-            holder.amountTV = (TextView) convertView.findViewById(R.id.groupAmountTV);
-            holder.userTV.setTag(position);
-            holder.amountTV.setTag(position);
-            holder.userTV.setText(users.get(position).getFullName());
-            holder.amountTV.setText(map.get(position).second.toString());
-        }
-        else {
-            holder = (GroupViewHolder) convertView.getTag();
-        }
-        int tag_position = (Integer) holder.userTV.getTag();
-        holder.userTV.setId(tag_position);
-        holder.amountTV.setId(tag_position);
-        return convertView;
+        return null;
     }
 }

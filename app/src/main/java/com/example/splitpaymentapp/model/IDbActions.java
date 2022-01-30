@@ -31,6 +31,10 @@ public interface IDbActions{
     interface IBrowsePayments{
          void onCompleted(List<Payment> payments);
     }
+
+    interface IBrowseReceipts{
+         void onCompleted(List<Receipt> receipts);
+    }
 }
 
 

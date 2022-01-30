@@ -13,9 +13,10 @@
         <entry key="..\:/Users/Wichau/Documents/GitHub/SplitPaymentApp/app/src/main/res/layout/activity_register.xml" value="0.25" />
         <entry key="..\:/Users/Wichau/Documents/GitHub/SplitPaymentApp/app/src/main/res/layout/add_payment_layout.xml" value="0.25" />
         <entry key="..\:/Users/Wichau/Documents/GitHub/SplitPaymentApp/app/src/main/res/layout/equal_pay_adapter.xml" value="0.18" />
-        <entry key="..\:/Users/Wichau/Documents/GitHub/SplitPaymentApp/app/src/main/res/layout/equalpay_adapter.xml" value="0.75" />
+        <entry key="..\:/Users/Wichau/Documents/GitHub/SplitPaymentApp/app/src/main/res/layout/equalpay_adapter.xml" value="0.33" />
         <entry key="..\:/Users/Wichau/Documents/GitHub/SplitPaymentApp/app/src/main/res/layout/grouplist_adapter.xml" value="0.9" />
         <entry key="..\:/Users/Wichau/Documents/GitHub/SplitPaymentApp/app/src/main/res/layout/paymentlist_adapter.xml" value="0.33" />
+        <entry key="..\:/Users/Wichau/Documents/GitHub/SplitPaymentApp/app/src/main/res/layout/receiptlist_adapter.xml" value="0.75" />
       </map>
     </option>
   </component>
