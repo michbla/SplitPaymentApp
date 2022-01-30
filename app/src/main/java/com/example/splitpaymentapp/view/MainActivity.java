@@ -19,7 +19,6 @@ import com.example.splitpaymentapp.model.Group;
 import com.example.splitpaymentapp.model.IDbActions;
 import com.example.splitpaymentapp.model.User;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Login.class ));
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class ));
                 finish();
             }
         });
@@ -96,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Register.class));
+                startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
             }
         });
 

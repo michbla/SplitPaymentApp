@@ -54,14 +54,19 @@ public class EqualPayActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.e("ADDPAY CLICK" ,"clicked");
                 List<Payment> payments = new ArrayList<Payment>();
+                List<String> paymentsString = new ArrayList<String>();
                 String receiptId = UUID.randomUUID().toString();
                 for (int i=0;i<adapter.users.size();i++) {
                     if (adapter.isEnabled.get(i)){
                         String paymentId = UUID.randomUUID().toString();
-                        payments.add(new Payment(receiptId, paymentId, userId, users.get(i).getUid(), adapter.subAmounts.get(i)));
+                        if (!userId.equals(users.get(i).getUid())) {
+                            adapter.subAmounts.set(i, Float.valueOf(String.format("%.2f",adapter.subAmounts.get(i))));
+                            payments.add(new Payment(receiptId, paymentId, userId, users.get(i).getUid(), adapter.subAmounts.get(i)));
+                            paymentsString.add(paymentId.toString());
+                        }
                     }
                 }
-                Receipt rc = new Receipt(receiptId, groupId, adapter.amount, payments, name, date);
+                Receipt rc = new Receipt(paymentsString, receiptId, groupId, adapter.amount,  name, userId, date);
                 DbActions.addReceipt(rc);
                 for (Payment x: payments) {
                     DbActions.addPayment(x);

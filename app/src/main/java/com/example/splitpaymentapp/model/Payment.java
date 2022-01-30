@@ -1,6 +1,9 @@
 package com.example.splitpaymentapp.model;
 
-public class Payment {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Payment implements Parcelable {
     private String receiptId;
     private String paymentId;
     private String paymentFrom;
@@ -19,6 +22,26 @@ public class Payment {
 
     }
 
+    protected Payment(Parcel in) {
+        receiptId = in.readString();
+        paymentId = in.readString();
+        paymentFrom = in.readString();
+        paymentTo = in.readString();
+        amount = in.readFloat();
+    }
+
+    public static final Creator<Payment> CREATOR = new Creator<Payment>() {
+        @Override
+        public Payment createFromParcel(Parcel in) {
+            return new Payment(in);
+        }
+
+        @Override
+        public Payment[] newArray(int size) {
+            return new Payment[size];
+        }
+    };
+
     public float getAmount(){
         return amount;
     }
@@ -35,5 +58,18 @@ public class Payment {
 
     public String getPaymentId() {
         return paymentId;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(paymentFrom);
+        dest.writeString(paymentTo);
+        dest.writeString(paymentId);
+        dest.writeFloat(amount);
     }
 }

@@ -147,8 +147,8 @@ public class DbActions {
         });
     }
 
-    public static void getPaymentsFromDb(@NonNull String groupId, IDbActions.IBrowsePayments IBrowsePayments){
-        _payments.whereEqualTo("groupId", groupId).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+    public static void getPaymentsFromDb(@NonNull String receiptId, IDbActions.IBrowsePayments IBrowsePayments){
+        _payments.whereEqualTo("receiptId", receiptId).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 List<Payment> paymentList = new ArrayList<Payment>();

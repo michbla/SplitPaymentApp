@@ -18,7 +18,7 @@ import com.example.splitpaymentapp.model.IDbActions;
 import com.example.splitpaymentapp.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class Login extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     EditText email, password;
     Button loginButton;
@@ -42,7 +42,7 @@ public class Login extends AppCompatActivity {
         alternateRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Register.class));
+                startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
             }
         });
     }
@@ -84,25 +84,25 @@ public class Login extends AppCompatActivity {
                     return;
                 }
 
-//                auth.signInWithEmailAndPassword(_email, _passwd).addOnCompleteListener(Login.this,new  OnCompleteListener<AuthResult>() {
+//                auth.signInWithEmailAndPassword(_email, _passwd).addOnCompleteListener(LoginActivity.this,new  OnCompleteListener<AuthResult>() {
 //                    @Override
 //                    public void onComplete(@NonNull Task<AuthResult> task) {
 //                        if (task.isSuccessful()){
-//                            Toast.makeText(Login.this, "Logged in", Toast.LENGTH_SHORT).show();
-//                            Intent intent = new Intent(Login.this, MainActivity.class);
+//                            Toast.makeText(LoginActivity.this, "Logged in", Toast.LENGTH_SHORT).show();
+//                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 //                            startActivity(intent);
 //                            finish();
 //                        }
 //                        else
-//                            Toast.makeText(Login.this, "Error Logging in", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(LoginActivity.this, "Error Logging in", Toast.LENGTH_SHORT).show();
 //                    }
 //                });
                 pbar.setVisibility(View.VISIBLE);
                 DbActions.loginUser(_email, _passwd, new IDbActions.ILoginUser() {
                     @Override
                     public void onCompleted(User user) {
-                        Toast.makeText(Login.this, "zalogowano!", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(Login.this, MainActivity.class);
+                        Toast.makeText(LoginActivity.this, "zalogowano!", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         intent.putExtra("id", auth.getUid());
                         startActivity(intent);
                         finish();

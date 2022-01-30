@@ -17,7 +17,7 @@ import com.example.splitpaymentapp.model.IDbActions;
 import com.example.splitpaymentapp.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class Register extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity {
 
     EditText fullName, email, passwd, passwd2;
     Button registerButton;
@@ -36,7 +36,7 @@ public class Register extends AppCompatActivity {
         alternateLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Login.class));
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 finish();
             }
         });
@@ -172,10 +172,10 @@ public class Register extends AppCompatActivity {
 //
 //                    User user = new User(auth.getUid().toString(), fullName.getText().toString(), email);
 //                    DbActions.addUserToDb(user);
-//                    Toast.makeText(Register.this, "you have been registered", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(RegisterActivity.this, "you have been registered", Toast.LENGTH_SHORT).show();
 //                }
 //                else{
-//                    Toast.makeText(Register.this, " xDError!" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(RegisterActivity.this, " xDError!" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
 //                }
 //
 //            }

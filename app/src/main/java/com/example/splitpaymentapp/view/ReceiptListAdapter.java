@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.splitpaymentapp.R;
 import com.example.splitpaymentapp.model.Receipt;
+import com.example.splitpaymentapp.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +19,10 @@ public class ReceiptListAdapter extends BaseAdapter {
 
     private Context context;
     private List<Receipt> receipts = new ArrayList<Receipt>();
+
     LayoutInflater inflater;
 
-    public ReceiptListAdapter(Context context, List<Receipt> receipts) {
+    public ReceiptListAdapter(Context context, List<Receipt> receipts ) {
         this.context = context;
         this.receipts = receipts;
     }
