@@ -8,22 +8,17 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.splitpaymentapp.R;
-import com.example.splitpaymentapp.model.DbActions;
-import com.example.splitpaymentapp.model.Payment;
 import com.example.splitpaymentapp.model.User;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 public class PaymentActivity extends AppCompatActivity {
 
@@ -69,7 +64,14 @@ public class PaymentActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 loadData();
-
+                Intent DetailPayActivity = new Intent(PaymentActivity.this, DetailedSplitActivity.class);
+                DetailPayActivity.putParcelableArrayListExtra("u", users);
+                DetailPayActivity.putExtra("date", date.toString());
+                DetailPayActivity.putExtra("amount", amount);
+                DetailPayActivity.putExtra("payName", name);
+                DetailPayActivity.putExtra("groupId", groupId);
+                DetailPayActivity.putExtra("userId", userId);
+                startActivity(DetailPayActivity);
             }
         });
 

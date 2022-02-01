@@ -2,6 +2,10 @@ package com.example.splitpaymentapp.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Pair;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Payment implements Parcelable {
     private String receiptId;
@@ -9,8 +13,13 @@ public class Payment implements Parcelable {
     private String paymentFrom;
     private String paymentTo;
     private float amount;
+    private List<DetailProduct> details;
 
     public Payment() {
+    }
+
+    public List<DetailProduct> getDetails() {
+        return details;
     }
 
     public Payment(String receiptId, String paymentId, String paymentFrom, String paymentTo, float amount) {
@@ -19,6 +28,17 @@ public class Payment implements Parcelable {
         this.paymentFrom = paymentFrom;
         this.paymentTo = paymentTo;
         this.amount = amount;
+        this.details = new ArrayList<>();
+
+    }
+    public Payment(String receiptId, String paymentId, String paymentFrom, String paymentTo, float amount, List<DetailProduct> details) {
+        this.receiptId = receiptId;
+        this.paymentId = paymentId;
+        this.paymentFrom = paymentFrom;
+        this.paymentTo = paymentTo;
+        this.amount = amount;
+        this.details = new ArrayList<>();
+        this.details.addAll(details);
 
     }
 
@@ -28,6 +48,7 @@ public class Payment implements Parcelable {
         paymentFrom = in.readString();
         paymentTo = in.readString();
         amount = in.readFloat();
+        in.readTypedList(details, DetailProduct.CREATOR);
     }
 
     public static final Creator<Payment> CREATOR = new Creator<Payment>() {
@@ -71,5 +92,6 @@ public class Payment implements Parcelable {
         dest.writeString(paymentTo);
         dest.writeString(paymentId);
         dest.writeFloat(amount);
+        dest.writeTypedList(details);
     }
 }

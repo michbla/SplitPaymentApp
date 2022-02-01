@@ -118,7 +118,7 @@ public class GroupActivity extends AppCompatActivity {
 
                         }
                     });
-
+//todo fix that shit
                 }
 
 
