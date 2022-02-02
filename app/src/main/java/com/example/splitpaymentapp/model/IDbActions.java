@@ -32,6 +32,10 @@ public interface IDbActions{
          void onCompleted(List<Payment> payments);
     }
 
+    interface IBrowsePaymentsWithinRange{
+         void onCompleted(List<Payment> payments);
+    }
+
     interface IBrowseReceipts{
          void onCompleted(List<Receipt> receipts);
     }

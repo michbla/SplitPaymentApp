@@ -129,6 +129,22 @@ public class DbActions {
         _payments.document(payment.getPaymentId()).set(payment);
     }
 
+    public static void browsePaymentsWithinRange(@NonNull List<String> list, IDbActions.IBrowsePaymentsWithinRange IBrowsePaymentsWithinRange){
+        _payments.whereIn("receiptId", list).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                List<Payment> payments = new ArrayList<Payment>();
+                if (task.isSuccessful()){
+                    for(QueryDocumentSnapshot documentSnapshot: task.getResult()){
+                        Payment p = documentSnapshot.toObject(Payment.class);
+                        payments.add(p);
+                    }
+                    IBrowsePaymentsWithinRange.onCompleted(payments);
+                }
+            }
+        });
+    }
+
     public static void addReceipt(@NonNull Receipt receipt) {_receipts.document(receipt.getId()).set(receipt); }
 
     public static void browseReceipts(String groupId, IDbActions.IBrowseReceipts IBrowseReceipts){

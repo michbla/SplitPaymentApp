@@ -9,6 +9,7 @@ import android.util.Pair;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.splitpaymentapp.R;
@@ -17,6 +18,7 @@ import com.example.splitpaymentapp.model.Group;
 import com.example.splitpaymentapp.model.IDbActions;
 import com.example.splitpaymentapp.model.Payment;
 import com.example.splitpaymentapp.model.Receipt;
+import com.example.splitpaymentapp.model.ReportGenerator;
 import com.example.splitpaymentapp.model.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -29,6 +31,7 @@ public class GroupActivity extends AppCompatActivity {
     Group group;
     ListView receiptLV;
     FloatingActionButton addExpenseButton;
+    Button payDayBtn;
     String userId;
     ReceiptListAdapter adapter;
 
@@ -68,6 +71,13 @@ public class GroupActivity extends AppCompatActivity {
                     }
                 }
         );
+
+        payDayBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ReportGenerator rg = new ReportGenerator(receiptList, users, userId);
+            }
+        });
     }
 
 
@@ -95,6 +105,7 @@ public class GroupActivity extends AppCompatActivity {
         readData(new GetReceiptsCallBack() {
             @Override
             public void onCallback(List<Receipt> list) {
+                receiptList.addAll(list);
                 adapter = new ReceiptListAdapter(GroupActivity.this, list);
                 receiptLV.setAdapter(adapter);
 
@@ -118,6 +129,7 @@ public class GroupActivity extends AppCompatActivity {
     private void init(){
         receiptLV = findViewById(R.id.usersListView);
         addExpenseButton = findViewById(R.id.addExpenseFloatingButton);
+        payDayBtn = (Button) findViewById(R.id.payDayBtn);
     }
 
     private void readData(GetReceiptsCallBack callBack){
