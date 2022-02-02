@@ -1,7 +1,6 @@
 package com.example.splitpaymentapp.model;
 
 import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +10,7 @@ public class ReportGenerator {
     private List<UserBalance> userBalances;
 
 
-    public ReportGenerator(List<Receipt> receipts, List<User> users, String userId) {
+    public ReportGenerator(List<Receipt> receipts, List<User> users, String userId, IReportGenerated IReportGenerated) {
         this.receipts = receipts;
         paymentsList = new ArrayList<>();
         userBalances = new ArrayList<>();
@@ -29,6 +28,7 @@ public class ReportGenerator {
                 paymentsList.addAll(payments);
 //                Log.e("xd", String.valueOf(paymentsList.size()));
                 addPaymentsToUsers();
+                IReportGenerated.onGenerated(userBalances);
             }
         });
 
@@ -48,9 +48,14 @@ public class ReportGenerator {
                 }
             }
         }
+    }
+//todo debug that
+    public void writeReport(){
         for(UserBalance u: userBalances){
             Log.e(u.getUser().getFullName(), String.valueOf(u.getBalance()));
         }
     }
 
 }
+
+

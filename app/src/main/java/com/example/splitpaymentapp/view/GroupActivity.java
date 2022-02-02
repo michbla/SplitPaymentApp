@@ -16,10 +16,12 @@ import com.example.splitpaymentapp.R;
 import com.example.splitpaymentapp.model.DbActions;
 import com.example.splitpaymentapp.model.Group;
 import com.example.splitpaymentapp.model.IDbActions;
+import com.example.splitpaymentapp.model.IReportGenerated;
 import com.example.splitpaymentapp.model.Payment;
 import com.example.splitpaymentapp.model.Receipt;
 import com.example.splitpaymentapp.model.ReportGenerator;
 import com.example.splitpaymentapp.model.User;
+import com.example.splitpaymentapp.model.UserBalance;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -75,7 +77,15 @@ public class GroupActivity extends AppCompatActivity {
         payDayBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ReportGenerator rg = new ReportGenerator(receiptList, users, userId);
+                ReportGenerator rg = new ReportGenerator(receiptList, users, userId, new IReportGenerated() {
+                    @Override
+                    public void onGenerated(List<UserBalance> ub) {
+                        for (UserBalance x:ub){
+                            Log.e(x.getUser().getFullName(), String.valueOf(x.getBalance()));
+                        }
+                    }
+                });
+
             }
         });
     }
