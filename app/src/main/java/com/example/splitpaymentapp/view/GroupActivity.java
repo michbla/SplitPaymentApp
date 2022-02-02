@@ -91,53 +91,28 @@ public class GroupActivity extends AppCompatActivity {
 
             }
         });
-        DbActions.browseReceipts(group.getUid(), new IDbActions.IBrowseReceipts() {
+
+        readData(new GetReceiptsCallBack() {
             @Override
-            public void onCompleted(List<Receipt> receipts) {
-                receiptList.addAll(receipts);
-                List<Receipt>includedReceiptList = new ArrayList<>();
-                for(Receipt x: receiptList){
-                    DbActions.getPaymentsFromDb(x.getId(), new IDbActions.IBrowsePayments() {
-
-                        @Override
-                        public void onCompleted(List<Payment> payments) {
-                            listOfPaymentLists.add((ArrayList<Payment>) payments); //czy zadziala wgl
-                            isIncluded = false;
-                            for (Payment z: payments) {
-                                if(z.getPaymentTo().equals(userId)){
-                                    isIncluded = true;
-                                    break;
-                                    }
-                                }
-                            if (isIncluded || x.getOwnerId().equals(userId)){
-                                includedReceiptList.add(x);
-                            }
-
-                            adapter = new ReceiptListAdapter(GroupActivity.this, includedReceiptList);
-                            receiptLV.setAdapter(adapter);
-
-                        }
-                    });
-//todo fix that shit
-                }
-
-
+            public void onCallback(List<Receipt> list) {
+                adapter = new ReceiptListAdapter(GroupActivity.this, list);
+                receiptLV.setAdapter(adapter);
 
                 receiptLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Log.e("groupPosClick", String.valueOf(position));
                         Intent receiptDetailsIntent = new Intent(GroupActivity.this, ReceiptDetailsActivity.class);
-                        Receipt r = includedReceiptList.get(position);
+                        Receipt r = list.get(position);
 //                        receiptDetailsIntent.putParcelableArrayListExtra("payments", listOfPaymentLists.get(position));
                         receiptDetailsIntent.putExtra("receipt", r);
                         receiptDetailsIntent.putParcelableArrayListExtra("users", users);
+                        receiptDetailsIntent.putExtra("userId", userId);
                         startActivity(receiptDetailsIntent);
                     }
                 });
             }
         });
-
     }
 
     private void init(){
@@ -145,5 +120,18 @@ public class GroupActivity extends AppCompatActivity {
         addExpenseButton = findViewById(R.id.addExpenseFloatingButton);
     }
 
+    private void readData(GetReceiptsCallBack callBack){
+        DbActions.browseReceipts(group.getUid(), new IDbActions.IBrowseReceipts() {
+            @Override
+            public void onCompleted(List<Receipt> receipts) {
+//                receiptList.addAll(receipts);
+                callBack.onCallback(receipts);
+            }
+        });
+    }
 
+}
+
+interface GetReceiptsCallBack{
+    void onCallback(List<Receipt> list);
 }

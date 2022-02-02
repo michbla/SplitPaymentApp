@@ -16,6 +16,7 @@ public class Payment implements Parcelable {
     private List<DetailProduct> details;
 
     public Payment() {
+        details = new ArrayList<>();
     }
 
     public List<DetailProduct> getDetails() {
