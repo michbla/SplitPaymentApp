@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -61,8 +62,8 @@ public class PayDetailsPop extends Activity {
                     pdValueET.setError("value must be positive");
                 }
 
-                if (itemVal>amount || itemVal-subAmounts<0){
-                    subAmounts-=itemVal;
+                if (itemVal>amount || itemVal+subAmounts>amount){
+//                    subAmounts-=itemVal;
                     pdValueET.setText("");
                     pdValueET.setHint("0.00");
                     pdValueET.setError("this exceeds amount of " + amount);
@@ -76,6 +77,7 @@ public class PayDetailsPop extends Activity {
                     pdValueET.setHint("0.00");
                     subAmounts +=itemVal;
                 }
+                Log.e("detailPop", subAmounts.toString());
             }
         });
 //todo fix business logic

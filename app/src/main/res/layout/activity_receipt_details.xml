@@ -7,23 +7,9 @@
     tools:context=".view.ReceiptDetailsActivity">
 
     <TextView
-        android:id="@+id/receiptDetailName"
-        android:layout_width="234dp"
-        android:layout_height="65dp"
-        android:text="TextView"
-        android:textAlignment="center"
-        android:textColor="#000000"
-        android:textSize="34sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.111" />
-
-    <TextView
         android:id="@+id/receiptDetailDate"
         android:layout_width="153dp"
-        android:layout_height="59dp"
+        android:layout_height="50dp"
         android:text="TextView"
         android:textAlignment="center"
         android:textColor="#000000"
@@ -32,30 +18,57 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.218" />
+        app:layout_constraintVertical_bias="0.158" />
+
+    <TextView
+        android:id="@+id/receiptDetailName"
+        android:layout_width="234dp"
+        android:layout_height="48dp"
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.067" />
 
     <TextView
         android:id="@+id/receiptDetailOptTV"
-        android:layout_width="153dp"
-        android:layout_height="59dp"
+        android:layout_width="157dp"
+        android:layout_height="26dp"
         android:text="TextView"
         android:textAlignment="center"
         android:textColor="#000000"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.333" />
+        app:layout_constraintVertical_bias="0.239" />
 
     <ListView
         android:id="@+id/receiptDetailLV"
-        android:layout_width="357dp"
-        android:layout_height="263dp"
+        android:layout_width="356dp"
+        android:layout_height="231dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.651" />
+        app:layout_constraintVertical_bias="0.439" />
+
+    <ImageView
+        android:id="@+id/receiptPhotoIV"
+        android:layout_width="197dp"
+        android:layout_height="211dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.923"
+        app:srcCompat="@android:drawable/ic_dialog_alert" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

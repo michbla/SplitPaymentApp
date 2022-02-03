@@ -1,9 +1,14 @@
 package com.example.splitpaymentapp.view;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,13 +24,22 @@ import com.example.splitpaymentapp.model.DetailProductList;
 import com.example.splitpaymentapp.model.Payment;
 import com.example.splitpaymentapp.model.Receipt;
 import com.example.splitpaymentapp.model.User;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class DetailedSplitActivity extends AppCompatActivity {
 
+    private static final int IMG_REQUEST = 12;
+    Bitmap btm;
     ArrayList<User> users = new ArrayList<>();
     ArrayList<Float> subs = new ArrayList<>();
     ListView usersLV;
@@ -38,6 +52,7 @@ public class DetailedSplitActivity extends AppCompatActivity {
     String receiptId;
     ArrayList<DetailProduct> products = new ArrayList<>();
     ArrayList<Payment> payments = new ArrayList<>();
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +71,20 @@ public class DetailedSplitActivity extends AppCompatActivity {
         receiptId = UUID.randomUUID().toString();
         adapter = new DetailedPayAdapter(this, users, amount, subs);
         usersLV.setAdapter(adapter);
+
+        addPhotoBtn.setOnClickListener(new View.OnClickListener() {
+            @SuppressWarnings("deprecation")
+            @Override
+            public void onClick(View v) {
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                try{
+                    startActivityForResult(cameraIntent, IMG_REQUEST);
+                }
+                catch(ActivityNotFoundException exception){
+                    Toast.makeText(DetailedSplitActivity.this, "nie udało się otworzyć kamery", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
 
         usersLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -81,6 +110,27 @@ public class DetailedSplitActivity extends AppCompatActivity {
                     DbActions.addReceipt(r);
 
                 }
+
+                if(btm!=null){
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        btm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                        byte[] photodata = baos.toByteArray();
+                        StorageReference photoRef = DbActions.storageReference.child("images/"+receiptId);
+                        UploadTask ut = (UploadTask) photoRef.putBytes(photodata).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                Toast.makeText(DetailedSplitActivity.this, "dodano zdjęcie", Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(DetailedSplitActivity.this, "nie udało się dodać zdjęcia", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+
+                }
+
                 else Toast.makeText(DetailedSplitActivity.this, "there is still some amount remaining", Toast.LENGTH_SHORT).show();
                 finish();
             }
@@ -117,16 +167,24 @@ public class DetailedSplitActivity extends AppCompatActivity {
 
         }
 
+        if (requestCode == IMG_REQUEST && resultCode == RESULT_OK){
+            Bundle bundle = data.getExtras();
+            btm = (Bitmap) bundle.get("data");
+            Log.e("aparat", "koniec");
+        }
+
     }
 
         private void init(){
             usersLV = findViewById(R.id.DUsersLV);
             amountTV = findViewById(R.id.DPayAmountTV);
             DAddPayBtn = findViewById(R.id.DAddPay);
+            addPhotoBtn = findViewById(R.id.DaddPhoto);
             remainAmountTV = findViewById(R.id.DremainAmountTV);
             for (User x: users) {
                 subs.add(0f);
             }
         }
+
 
 }

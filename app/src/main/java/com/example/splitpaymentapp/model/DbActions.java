@@ -18,6 +18,8 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,7 +31,8 @@ import java.util.concurrent.CountDownLatch;
 
 public class DbActions {
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+    public static FirebaseStorage storage = FirebaseStorage.getInstance();
+    public static StorageReference storageReference = storage.getReference();
     private static DbActions dbActions;
     private static CollectionReference _users = db.collection("Users");
     private static CollectionReference _groups = db.collection("Groups");

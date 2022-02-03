@@ -45,7 +45,7 @@
         app:layout_constraintVertical_bias="0.955" />
 
     <Button
-        android:id="@+id/addPhoto"
+        android:id="@+id/eqAddPhoto"
         android:layout_width="137dp"
         android:layout_height="79dp"
         android:text="Dodaj zdjęcie"

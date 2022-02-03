@@ -1,11 +1,16 @@
 package com.example.splitpaymentapp.view;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -16,7 +21,11 @@ import com.example.splitpaymentapp.model.IDbActions;
 import com.example.splitpaymentapp.model.Payment;
 import com.example.splitpaymentapp.model.Receipt;
 import com.example.splitpaymentapp.model.User;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +36,7 @@ public class ReceiptDetailsActivity extends AppCompatActivity {
     Receipt receipt;
     TextView receiptDetailsName, receiptDetailsDate, receiptDetailsOpt;
     ListView receiptDetailsLV;
+    ImageView photoView;
     List<Payment> paymentsList;
     List<DetailProduct> detailProductList;
     String owedId;
@@ -48,6 +58,24 @@ public class ReceiptDetailsActivity extends AppCompatActivity {
         loadPaymentsFromReceipt();
         receiptDetailsName.setText(receipt.getName());
         receiptDetailsDate.setText(receipt.getDate());
+
+
+        StorageReference reference = DbActions.storageReference.child("images/"+receipt.getId());
+        reference.getBytes(20000).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                Bitmap btm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                photoView.setImageBitmap(btm);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                photoView.setVisibility(View.INVISIBLE);
+                Log.e("loadPhoto", "no photo");
+            }
+        });
+
     }
 
     private void loadPaymentsFromReceipt(){
@@ -91,7 +119,10 @@ public class ReceiptDetailsActivity extends AppCompatActivity {
                 if (nZalega || nDot){
                     if (nZalega){
                         users.remove(getUserById(userId));
-                        paymentsList.remove(getPaymentByDestId(userId));
+                        for(Payment pay : payments) {
+                            if (isSelfPayment(pay))
+                                paymentsList.remove(pay);
+                        }
                      }
                     receiptDetailsOpt.setText("zapłaciłeś " + getLentValue() + " za");
                     adapter = new ReceiptDetailsAdapter(ReceiptDetailsActivity.this, paymentsList, users);
@@ -141,6 +172,24 @@ public class ReceiptDetailsActivity extends AppCompatActivity {
         return null;
     }
 
+    private boolean isSelfPayment(Payment x){
+        if (x.getPaymentTo().equals(x.getPaymentFrom()))
+            return true;
+        return false;
+    }
+
+    private int remove2SelfPayments(){
+        Payment buf = null;
+        for(Payment x : paymentsList){
+            if (x.getPaymentTo().equals(x.getPaymentFrom())){
+                buf = x;
+            }
+        }
+        if (buf != null)
+            return paymentsList.indexOf(buf);
+        else return -1;
+    }
+
     private void init(){
         paymentsList = new ArrayList<>();
         detailProductList = new ArrayList<>();
@@ -149,6 +198,7 @@ public class ReceiptDetailsActivity extends AppCompatActivity {
         receiptDetailsOpt = (TextView) findViewById(R.id.receiptDetailOptTV);
         receiptDetailsOpt.setVisibility(TextView.INVISIBLE);
         receiptDetailsLV = (ListView) findViewById(R.id.receiptDetailLV);
+        photoView = (ImageView) findViewById(R.id.receiptPhotoIV);
     }
 
     private float getLentValue(){
