@@ -6,18 +6,21 @@
 
     <TextView
         android:id="@+id/pdUserTV"
-        android:layout_width="138dp"
-        android:layout_height="80dp"
+        android:layout_width="177dp"
+        android:layout_height="54dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="136dp"
-        android:layout_marginTop="87dp"
-        android:layout_marginEnd="136dp"
-        android:layout_marginBottom="564dp"
+        android:layout_marginStart="117dp"
+        android:layout_marginTop="90dp"
+        android:layout_marginEnd="116dp"
+        android:layout_marginBottom="587dp"
         android:background="#FFFFFF"
-        android:text="TextView" />
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textColor="#050505"
+        android:textSize="24sp" />
 
     <EditText
         android:id="@+id/pdproductET"
@@ -51,29 +54,29 @@
 
     <Button
         android:id="@+id/pdfinishBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="147dp"
+        android:layout_height="76dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="86dp"
+        android:layout_marginStart="33dp"
         android:layout_marginTop="450dp"
         android:layout_marginEnd="231dp"
-        android:layout_marginBottom="233dp"
-        android:text="Button" />
+        android:layout_marginBottom="205dp"
+        android:text="zakończ" />
 
     <Button
         android:id="@+id/pdnextitemBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="147dp"
+        android:layout_height="73dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="231dp"
         android:layout_marginTop="451dp"
-        android:layout_marginEnd="86dp"
-        android:layout_marginBottom="232dp"
-        android:text="Button" />
+        android:layout_marginEnd="33dp"
+        android:layout_marginBottom="207dp"
+        android:text="dodaj następny" />
 </RelativeLayout>

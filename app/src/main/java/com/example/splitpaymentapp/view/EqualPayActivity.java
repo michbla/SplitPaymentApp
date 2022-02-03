@@ -72,6 +72,7 @@ public class EqualPayActivity extends AppCompatActivity {
                     DbActions.addPayment(x);
                 }
                 Log.e("ADDPAY CLICK" ,"finished");
+                finish();
             }
         });
 

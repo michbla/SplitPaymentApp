@@ -8,6 +8,12 @@ public interface IDbActions{
         void onCompleted(User user);
     }
 
+    interface IAddUserToGroup{
+         void onSuccess();
+         void onFail();
+         void onAlreadyInGroup();
+    }
+
      interface IRegisterUser{
         void onCompleted(User user);
     }

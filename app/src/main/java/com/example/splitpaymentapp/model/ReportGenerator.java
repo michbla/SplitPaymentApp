@@ -8,7 +8,7 @@ public class ReportGenerator {
     private List<Receipt> receipts;
     private List<Payment> paymentsList;
     private List<UserBalance> userBalances;
-
+    private String userId;
 
     public ReportGenerator(List<Receipt> receipts, List<User> users, String userId, IReportGenerated IReportGenerated) {
         this.receipts = receipts;
@@ -22,6 +22,7 @@ public class ReportGenerator {
         for (Receipt r: this.receipts){
             rIds.add(r.getId());
         }
+        this.userId = userId;
         DbActions.browsePaymentsWithinRange(rIds ,new IDbActions.IBrowsePaymentsWithinRange() {
             @Override
             public void onCompleted(List<Payment> payments) {
@@ -35,18 +36,43 @@ public class ReportGenerator {
     }
 
     private void addPaymentsToUsers(){
-        for(Payment x:paymentsList){
-            for(UserBalance z: userBalances){
-                String Uid = z.getUser().getUid();
-                String payee = x.getPaymentTo();
-                String payer = x.getPaymentFrom();
-                if(Uid.equals(payee)){
-                    z.addBalance(x.getAmount());
-                }
-                else if(Uid.equals(payer)){
-                    z.subBalance(x.getAmount());
+        for (Receipt r : receipts){
+            List<String> ids = r.getPaymentIds();
+            List<Payment> bufPays = new ArrayList<>();
+            for(String s:ids){
+                bufPays.add(getPaymentById(s));
+            }
+            if (r.getOwnerId().equals(userId)) { //dodajemy na konta innych
+                for (Payment p : bufPays) {
+                    for(UserBalance u: userBalances){
+                        try {
+                            if (p.getPaymentTo().equals(u.getUser().getUid())){
+                                u.addBalance(p.getAmount());
+                            }
+                        }
+                        catch (Exception e){
+                            Log.e("payment not found", "xd");
+                        }
+
+                    }
                 }
             }
+
+            else { //odejmujemy z kont innych
+                for (Payment p : bufPays) {
+                    for(UserBalance u: userBalances){
+                        try {
+                            if (p.getPaymentTo().equals(userId) && p.getPaymentFrom().equals(u.getUser().getUid())){
+                                u.subBalance(p.getAmount());
+                            }
+                        }
+                        catch (Exception e){
+                            Log.e("payment not found", "xd");
+                        }
+                    }
+                }
+            }
+            bufPays.clear();
         }
     }
 //todo debug that
@@ -56,6 +82,14 @@ public class ReportGenerator {
         }
     }
 
+
+    private Payment getPaymentById(String id){
+        for (Payment x : paymentsList){
+            if (x.getPaymentId().equals(id))
+                return x;
+        }
+        return null;
+    }
 }
 
 

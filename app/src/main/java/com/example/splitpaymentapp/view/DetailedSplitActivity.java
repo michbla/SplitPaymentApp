@@ -82,6 +82,7 @@ public class DetailedSplitActivity extends AppCompatActivity {
 
                 }
                 else Toast.makeText(DetailedSplitActivity.this, "there is still some amount remaining", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
 

@@ -8,14 +8,28 @@ public class Group implements Serializable {
     private String Uid;
     private String groupName;
     private String groupOwner;
+    private int isFinished;
     private List<User> userList;
     private List<Payment> paymentList;
 
-    public Group(String groupName, User owner, String groupOwner) {
+
+    public Group(String groupName, String groupOwner, int isFinished, User owner) {
         this.groupName = groupName;
         this.groupOwner = groupOwner;
+        this.isFinished = isFinished;
         userList = new ArrayList<>();
         this.userList.add(owner);
+
+    }
+
+    public Group(String Uid, String groupName, String groupOwner, int isFinished, User owner) {
+        this.Uid = Uid;
+        this.groupName = groupName;
+        this.groupOwner = groupOwner;
+        this.isFinished = isFinished;
+        userList = new ArrayList<>();
+//        this.userList.add(owner);
+
     }
 
     public Group(){
@@ -44,5 +58,18 @@ public class Group implements Serializable {
 
     public String getUid() {
         return Uid;
+    }
+
+    public String getGroupOwner() {
+        return groupOwner;
+    }
+
+    public int getIsFinished() {
+        return isFinished;
+    }
+
+    public void setFinished() {
+        isFinished = 1;
+        DbActions.setGroupFinished(getUid());
     }
 }

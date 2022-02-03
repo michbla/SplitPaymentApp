@@ -89,12 +89,17 @@ public class ReceiptDetailsActivity extends AppCompatActivity {
                 }
                 receiptDetailsOpt.setVisibility(TextView.VISIBLE);
                 if (nZalega || nDot){
+                    if (nZalega){
+                        users.remove(getUserById(userId));
+                        paymentsList.remove(getPaymentByDestId(userId));
+                     }
                     receiptDetailsOpt.setText("zapłaciłeś " + getLentValue() + " za");
                     adapter = new ReceiptDetailsAdapter(ReceiptDetailsActivity.this, paymentsList, users);
                     if (nDot){
 
                         receiptDetailsOpt.setText("nie ma cie na liście");
                     }
+
                 }
                 else if (zalegaOg){
                     receiptDetailsOpt.setText("zalegasz: ");
@@ -117,6 +122,23 @@ public class ReceiptDetailsActivity extends AppCompatActivity {
                 return x.getFullName();
         }
         return "not found";
+    }
+
+    private User getUserById(String id){
+        for(User x: users){
+            if (x.getUid().equals(id))
+                return x;
+        }
+        return null;
+    }
+
+    private Payment getPaymentByDestId(String id){
+        for(Payment x : paymentsList){
+            if (x.getPaymentTo().equals(id))
+                return x;
+
+        }
+        return null;
     }
 
     private void init(){

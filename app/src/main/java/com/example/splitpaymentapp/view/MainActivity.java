@@ -19,6 +19,7 @@ import com.example.splitpaymentapp.model.Group;
 import com.example.splitpaymentapp.model.IDbActions;
 import com.example.splitpaymentapp.model.User;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 groupViewIntent.putExtra("group", g);
                 groupViewIntent.putExtra("user", userId);
                 startActivity(groupViewIntent);
+                finish();
             }
         });
 
@@ -103,13 +105,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.e("onClickCreateGroup", user1.getUid() + " " + user1.getFullName());
-                DbActions.createGroup(user1, "kaczuchy", new IDbActions.ICreateGroup() {
-                    @Override
-                    public void onCompleted(Group group) {
-                        Toast.makeText(MainActivity.this, "created group with name=" + group.getGroupName(), Toast.LENGTH_SHORT).show();
-                        fillGroupList();
-                    }
-                });
+                Intent intent = new Intent(MainActivity.this, CreateGroupActivity.class);
+                intent.putExtra("user", (Serializable) user1);
+                startActivity(intent);
+                finish();
+//                DbActions.createGroup(user1, "kaczuchy", new IDbActions.ICreateGroup() {
+//                    @Override
+//                    public void onCompleted(Group group) {
+//                        Toast.makeText(MainActivity.this, "created group with name=" + group.getGroupName(), Toast.LENGTH_SHORT).show();
+//                        fillGroupList();
+//                    }
+//                });
             }
         });
     }

@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 import java.io.Serializable;
 
-public class User implements Parcelable {
+public class User implements Parcelable, Serializable {
     private String Uid;
     private String fullName;
     private String email;

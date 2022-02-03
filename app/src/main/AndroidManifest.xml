@@ -10,7 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SplitPaymentApp">
         <activity
-            android:name=".view.PayDetailsPop">
+            android:name=".view.AddUsersActivity"
+            android:exported="false" />
+        <activity android:name=".view.PayDetailsPop">
             android:theme="@style/AppCompat.pop">
         </activity>
         <activity

@@ -14,6 +14,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -23,6 +24,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 
 public class DbActions {
@@ -94,6 +96,48 @@ public class DbActions {
         _users.document(user.getUid()).set(userMap);
     }
 
+    public static void addUserToGroup(@NonNull String email, @NonNull String groupId, IDbActions.IAddUserToGroup IAddUserToGroup){
+        _users.whereEqualTo("email", email).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    QuerySnapshot snapshot = task.getResult();
+                    List<User> x = snapshot.toObjects(User.class);
+                    if (x.size()==0){
+                        IAddUserToGroup.onFail();
+                    }
+                    else {
+                        _groups.whereArrayContains("users", x.get(0).getUid()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                boolean inThisGroup = false;
+                                if (task.isSuccessful()) {
+                                    QuerySnapshot snapshots = task.getResult();
+                                    List<Group> groups = new ArrayList<>();
+                                    groups.addAll(snapshots.toObjects(Group.class));
+                                    for (Group z : groups) {
+                                        if (z.getUid().equals(groupId)) {
+                                            inThisGroup = true;
+                                            IAddUserToGroup.onAlreadyInGroup();
+                                        }
+                                    }
+                                    if (!inThisGroup) {
+                                        _groups.document(groupId).update("users", FieldValue.arrayUnion((x.get(0).getUid()))).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                IAddUserToGroup.onSuccess();
+                                            }
+                                        });
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }
+
 
     public static void getUserFromDb(@NonNull String Uid, IDbActions.IAddUser interFace) {
         _users.document(Uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -111,17 +155,20 @@ public class DbActions {
 
     public static void createGroup(@NonNull User user, String _groupName, IDbActions.ICreateGroup ICreateGroup){
         Map<String, Object> groupData = new HashMap<>();
+        String  id =  UUID.randomUUID().toString();
+        groupData.put("Uid", id);
         groupData.put("groupName", _groupName);
         groupData.put("groupOwner", auth.getUid());
+        groupData.put("isFinished", 0);
+        groupData.put("users", Arrays.asList(auth.getUid()));
         //groupData.put("users", FieldValue.arrayUnion(auth.getUid()));
         Log.e("debugData", _groupName + " " + auth.getUid() + " " + Arrays.asList(auth.getUid()));
-        _groups.add(groupData).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        _groups.document(id).set(groupData).addOnSuccessListener(new OnSuccessListener() {
             @Override
-            public void onSuccess(DocumentReference documentReference) {
-                Log.w("groupRegister", "grupa utworzona z id: " + _groups.document().getId());
-                ICreateGroup.onCompleted(new Group(_groupName, user, auth.getUid()));
-
+            public void onSuccess(Object o) {
+                ICreateGroup.onCompleted(new Group(id, _groupName, auth.getUid(), 0, user));
             }
+
         });
     }
 
@@ -219,6 +266,10 @@ public class DbActions {
             }
         });
 
+    }
+
+    public static void setGroupFinished(String gId){
+        _groups.document(gId).update("isFinished", 1);
     }
 
 }

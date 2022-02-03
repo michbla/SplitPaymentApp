@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.splitpaymentapp.R;
 import com.example.splitpaymentapp.model.DbActions;
@@ -32,16 +33,19 @@ public class GroupActivity extends AppCompatActivity {
     ArrayList<User> users = new ArrayList<>();
     Group group;
     ListView receiptLV;
-    FloatingActionButton addExpenseButton;
+    TextView groupNameTV, noReceiptAlertTV;
+    Button addExpenseButton;
     Button payDayBtn;
     String userId;
     ReceiptListAdapter adapter;
-
+    ReportViewAdapter reportAdapter;
     private boolean isIncluded = false;
     List<Receipt> receiptList = new ArrayList<>();
     ArrayList<ArrayList<Payment>> listOfPaymentLists = new ArrayList<>();
     String receiptName, receiptDate;
     float receiptValue;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,38 +60,41 @@ public class GroupActivity extends AppCompatActivity {
         catch (Exception e){
             Log.e("GroupFatal", "failed to fetch Group");
         }
+
+
         init();
         fillUserList();
 
-        addExpenseButton.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent paymentIntent = new Intent(GroupActivity.this, PaymentActivity.class);
-                        Bundle bundle = new Bundle();
-                        paymentIntent.putParcelableArrayListExtra("u", users);
-                        paymentIntent.putExtra("user", userId);
-                        paymentIntent.putExtra("groupId",group.getUid());
-                        startActivity(paymentIntent);
-
-                    }
+        if(group.getIsFinished() == 1){
+//            addExpenseButton.setVisibility(View.INVISIBLE);
+            addExpenseButton.setText("cofnij do menu");
+            payDayBtn.setVisibility(View.VISIBLE);
+            payDayBtn.setText("pokaż raport");
+            addExpenseButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onBackPressed();
                 }
-        );
+            });
+        }
+        else {
+            addExpenseButton.setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent paymentIntent = new Intent(GroupActivity.this, PaymentActivity.class);
+                            Bundle bundle = new Bundle();
+                            paymentIntent.putParcelableArrayListExtra("u", users);
+                            paymentIntent.putExtra("user", userId);
+                            paymentIntent.putExtra("groupId", group);
+                            startActivity(paymentIntent);
 
-        payDayBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ReportGenerator rg = new ReportGenerator(receiptList, users, userId, new IReportGenerated() {
-                    @Override
-                    public void onGenerated(List<UserBalance> ub) {
-                        for (UserBalance x:ub){
-                            Log.e(x.getUser().getFullName(), String.valueOf(x.getBalance()));
                         }
                     }
-                });
+            );
+        }
 
-            }
-        });
+
     }
 
 
@@ -116,30 +123,83 @@ public class GroupActivity extends AppCompatActivity {
             @Override
             public void onCallback(List<Receipt> list) {
                 receiptList.addAll(list);
-                adapter = new ReceiptListAdapter(GroupActivity.this, list);
-                receiptLV.setAdapter(adapter);
-
-                receiptLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Log.e("groupPosClick", String.valueOf(position));
-                        Intent receiptDetailsIntent = new Intent(GroupActivity.this, ReceiptDetailsActivity.class);
-                        Receipt r = list.get(position);
+                if (group.getIsFinished() != 1) {
+                    if (list.size() > 0) {
+                        adapter = new ReceiptListAdapter(GroupActivity.this, list);
+                        receiptLV.setAdapter(adapter);
+                        receiptLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                Log.e("groupPosClick", String.valueOf(position));
+                                Intent receiptDetailsIntent = new Intent(GroupActivity.this, ReceiptDetailsActivity.class);
+                                Receipt r = list.get(position);
 //                        receiptDetailsIntent.putParcelableArrayListExtra("payments", listOfPaymentLists.get(position));
-                        receiptDetailsIntent.putExtra("receipt", r);
-                        receiptDetailsIntent.putParcelableArrayListExtra("users", users);
-                        receiptDetailsIntent.putExtra("userId", userId);
-                        startActivity(receiptDetailsIntent);
+                                receiptDetailsIntent.putExtra("receipt", r);
+                                receiptDetailsIntent.putParcelableArrayListExtra("users", users);
+                                receiptDetailsIntent.putExtra("userId", userId);
+                                startActivity(receiptDetailsIntent);
+                            }
+                        });
+                    } else {
+                        noReceiptAlertTV.setText("brak paragonów, dodaj pierwszy");
+
                     }
-                });
+                }
+                else if (group.getIsFinished() == 1){
+                    noReceiptAlertTV.setText("grupa jest rozliczona.");
+                    payDayBtn.setVisibility(Button.VISIBLE);
+                }
             }
         });
     }
 
     private void init(){
         receiptLV = findViewById(R.id.usersListView);
-        addExpenseButton = findViewById(R.id.addExpenseFloatingButton);
-        payDayBtn = (Button) findViewById(R.id.payDayBtn);
+        groupNameTV = findViewById(R.id.groupNameTextView);
+        groupNameTV.setText(group.getGroupName());
+        noReceiptAlertTV = findViewById(R.id.noReceiptAlertTV);
+        noReceiptAlertTV.setText("");
+        addExpenseButton = findViewById(R.id.addExpenseButton);
+        if (!group.getGroupOwner().equals(userId)){
+            payDayBtn = (Button) findViewById(R.id.payDayBtn);
+        }
+        if (group.getGroupOwner().equals(userId) || (!group.getGroupOwner().equals(userId) && group.getIsFinished() == 1 ) ) {
+            payDayBtn = (Button) findViewById(R.id.payDayBtn);
+            payDayBtn.setText("Rozlicz grupę");
+            payDayBtn.setVisibility(Button.VISIBLE);
+            payDayBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ReportGenerator rg = new ReportGenerator(receiptList, users, userId, new IReportGenerated() {
+                        @Override
+                        public void onGenerated(List<UserBalance> ub) {
+                            group.setFinished();
+                            noReceiptAlertTV.setText("grupa jest rozliczona.");
+//                            payDayBtn.setVisibility(View.INVISIBLE);
+//                            addExpenseButton.setVisibility(View.INVISIBLE);
+                            reportAdapter = new ReportViewAdapter(GroupActivity.this, ub);
+                            receiptLV.setAdapter(reportAdapter);
+                            receiptLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                                }
+                            });
+                            addExpenseButton.setText("cofnij do menu");
+                            addExpenseButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    onBackPressed();
+                                }
+                            });
+
+                        }
+                    });
+
+                }
+            });
+        }
+
     }
 
     private void readData(GetReceiptsCallBack callBack){
@@ -150,6 +210,14 @@ public class GroupActivity extends AppCompatActivity {
                 callBack.onCallback(receipts);
             }
         });
+    }
+
+    @Override
+    public void onBackPressed(){
+        Intent backIntent = new Intent(GroupActivity.this, MainActivity.class);
+        backIntent.putExtra("id", userId);
+        startActivity(backIntent);
+        finish();
     }
 
 }
