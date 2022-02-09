@@ -40,7 +40,7 @@ public class CreateGroupActivity extends AppCompatActivity {
                         public void onCompleted(Group group) {
                             Toast.makeText(CreateGroupActivity.this, "grupa " + name + " założona", Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(CreateGroupActivity.this,AddUsersActivity.class);
-                            intent.putExtra("user", (Serializable) user);
+                            intent.putExtra("user", user.getUid());
                             intent.putExtra("group", group);
                             startActivity(intent);
                         }

@@ -36,6 +36,7 @@ public class GroupActivity extends AppCompatActivity {
     TextView groupNameTV, noReceiptAlertTV;
     Button addExpenseButton;
     Button payDayBtn;
+    Button addUserBtn;
     String userId;
     ReceiptListAdapter adapter;
     ReportViewAdapter reportAdapter;
@@ -62,11 +63,22 @@ public class GroupActivity extends AppCompatActivity {
         }
 
 
+
         init();
         fillUserList();
-
+        addUserBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(GroupActivity.this, AddUsersActivity.class);
+                intent.putExtra("group", group);
+                intent.putExtra("user", userId);
+                startActivity(intent);
+                finish();
+            }
+        });
         if(group.getIsFinished() == 1){
 //            addExpenseButton.setVisibility(View.INVISIBLE);
+            addUserBtn.setVisibility(View.INVISIBLE);
             addExpenseButton.setText("cofnij do menu");
             payDayBtn.setVisibility(View.VISIBLE);
             payDayBtn.setText("pokaż raport");
@@ -157,11 +169,13 @@ public class GroupActivity extends AppCompatActivity {
         receiptLV = findViewById(R.id.usersListView);
         groupNameTV = findViewById(R.id.groupNameTextView);
         groupNameTV.setText(group.getGroupName());
+        addUserBtn = findViewById(R.id.gAddUserBtn);
         noReceiptAlertTV = findViewById(R.id.noReceiptAlertTV);
         noReceiptAlertTV.setText("");
         addExpenseButton = findViewById(R.id.addExpenseButton);
         if (!group.getGroupOwner().equals(userId)){
             payDayBtn = (Button) findViewById(R.id.payDayBtn);
+            addUserBtn.setVisibility(View.INVISIBLE);
         }
         if (group.getGroupOwner().equals(userId) || (!group.getGroupOwner().equals(userId) && group.getIsFinished() == 1 ) ) {
             payDayBtn = (Button) findViewById(R.id.payDayBtn);
@@ -170,6 +184,7 @@ public class GroupActivity extends AppCompatActivity {
             payDayBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    addUserBtn.setVisibility(View.INVISIBLE);
                     ReportGenerator rg = new ReportGenerator(receiptList, users, userId, new IReportGenerated() {
                         @Override
                         public void onGenerated(List<UserBalance> ub) {

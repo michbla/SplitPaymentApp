@@ -24,14 +24,14 @@ public class AddUsersActivity extends AppCompatActivity {
     String mail;
     Button addUserBtn, goToGroupBtn;
     EditText setMail;
-    User user;
+    String  user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_users);
         group =(Group) getIntent().getSerializableExtra("group");
-        user = (User) getIntent().getSerializableExtra("user");
+        user = (String) getIntent().getSerializableExtra("user");
         init();
 
         goToGroupBtn.setOnClickListener(new View.OnClickListener() {
@@ -39,8 +39,9 @@ public class AddUsersActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(AddUsersActivity.this, GroupActivity.class);
                 intent.putExtra("group", group);
-                intent.putExtra("user", user.getUid());
+                intent.putExtra("user", user);
                 startActivity(intent);
+                finish();
             }
         });
 

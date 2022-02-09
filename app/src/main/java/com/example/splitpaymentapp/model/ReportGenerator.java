@@ -1,6 +1,10 @@
 package com.example.splitpaymentapp.model;
 
 import android.util.Log;
+import android.widget.Toast;
+
+import com.example.splitpaymentapp.view.GroupActivity;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,15 +27,21 @@ public class ReportGenerator {
             rIds.add(r.getId());
         }
         this.userId = userId;
-        DbActions.browsePaymentsWithinRange(rIds ,new IDbActions.IBrowsePaymentsWithinRange() {
-            @Override
-            public void onCompleted(List<Payment> payments) {
-                paymentsList.addAll(payments);
+        try{
+            DbActions.browsePaymentsWithinRange(rIds ,new IDbActions.IBrowsePaymentsWithinRange() {
+                @Override
+                public void onCompleted(List<Payment> payments) {
+                    paymentsList.addAll(payments);
 //                Log.e("xd", String.valueOf(paymentsList.size()));
-                addPaymentsToUsers();
-                IReportGenerated.onGenerated(userBalances);
-            }
-        });
+                    addPaymentsToUsers();
+                    IReportGenerated.onGenerated(userBalances);
+                }
+            });
+        }
+        catch (Exception x){
+
+        }
+
 
     }
 
