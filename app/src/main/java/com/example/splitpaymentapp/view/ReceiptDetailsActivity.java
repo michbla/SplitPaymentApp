@@ -124,7 +124,7 @@ public class ReceiptDetailsActivity extends AppCompatActivity {
                                 paymentsList.remove(pay);
                         }
                      }
-                    receiptDetailsOpt.setText("zapłaciłeś " + getLentValue() + " za");
+                    receiptDetailsOpt.setText("zapłaciłeś " + String.format("%.2f",getLentValue()) + " za");
                     adapter = new ReceiptDetailsAdapter(ReceiptDetailsActivity.this, paymentsList, users);
                     if (nDot){
 
@@ -137,7 +137,7 @@ public class ReceiptDetailsActivity extends AppCompatActivity {
                     adapter = new ReceiptDetailsAdapter(ReceiptDetailsActivity.this, payment, users);
                 }
                 else if (zalegaDet){
-                    receiptDetailsOpt.setText("zalegasz " + getOwedValue() + " dla " + getUserNameById(owedId, users) + " za:");
+                    receiptDetailsOpt.setText("zalegasz " + String.format("%.2f",getOwedValue()) + " dla " + getUserNameById(owedId, users) + " za:");
                     adapter = new ReceiptDetailsAdapter(ReceiptDetailsActivity.this, detailProductList, users, true);
                 }
 

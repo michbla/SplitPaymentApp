@@ -2,6 +2,7 @@ package com.example.splitpaymentapp.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,7 +69,10 @@ public class ReceiptListAdapter extends BaseAdapter {
 
             holder.rcName.setText(receipts.get(position).getName());
             holder.rcDate.setText(receipts.get(position).getDate());
-            holder.rcValue.setText(String.valueOf(receipts.get(position).getAmount()));
+            String x = String.format("%.2f",receipts.get(position).getAmount());
+//            x.replaceAll("\\.", ",");
+//            Log.e("subAm",x);
+            holder.rcValue.setText(x);
 
             convertView.setTag(holder);
         }

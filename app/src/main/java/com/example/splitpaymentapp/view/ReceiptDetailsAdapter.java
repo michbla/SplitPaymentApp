@@ -91,15 +91,18 @@ public class ReceiptDetailsAdapter extends BaseAdapter {
             holder.amountTV.setTag(position);
             if(mode == 0) {
                 holder.userTV.setText(ReceiptDetailsActivity.getUserNameById(payments.get(position).getPaymentTo(), users));
-                holder.amountTV.setText(String.valueOf(payments.get(position).getAmount()));
+                String x = String.format("%.2f", payments.get(position).getAmount());
+                holder.amountTV.setText(x);
             }
             if (mode == 1){
                 holder.userTV.setText(paymentDets.get(position).getProduct());
-                holder.amountTV.setText(String.valueOf(paymentDets.get(position).getValue()));
+                String x = String.format("%.2f", paymentDets.get(position).getValue());
+                holder.amountTV.setText(x);
             }
             if (mode == 2){
                 holder.userTV.setText(ReceiptDetailsActivity.getUserNameById(singlePay.getPaymentFrom(), users));
-                holder.amountTV.setText(String.valueOf(singlePay.getAmount()));
+                String x = String.format("%.2f", singlePay.getAmount());
+                holder.amountTV.setText(x);
             }
         }
         else {

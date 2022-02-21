@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.example.splitpaymentapp.R;
 import com.example.splitpaymentapp.model.User;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
 
@@ -45,9 +46,17 @@ public class EqualPayAdapter extends BaseAdapter {
         for (int i=0;i<usersInList;i++) {
             isEnabled.add(true);
             isChanged.add(false);
+            BigDecimal a = new BigDecimal(amount/usersInList);
+            BigDecimal b = a.setScale(2, BigDecimal.ROUND_DOWN);
+            subAmounts.add(b.floatValue());
+            Log.e("subAm", b.toString());
         }
+        float sumBuf = 0;
         for (int i=0;i<usersInList;i++){
-            subAmounts.add(amount/usersInList);
+            sumBuf += subAmounts.get(i);
+        }
+        if (sumBuf!=amount){
+            subAmounts.set(0, (float) (subAmounts.get(0)+(amount-sumBuf)));
         }
     }
 
@@ -188,14 +197,39 @@ public class EqualPayAdapter extends BaseAdapter {
     }
 
     private void loadSubsList(int pos){
+        int firstActive = getFirstActive();
+        BigDecimal a,b;
+
+        if(firstActive!=-1) {
+            a = new BigDecimal(amount / usersInList);
+            b = a.setScale(2, BigDecimal.ROUND_DOWN);
+        }
+        else b = new BigDecimal(0);
+
+        float sumBuf = 0;
         for (int i=0;i<subAmounts.size();i++){
             if(i==pos)
                 continue;
             else
-                if(isEnabled.get(i))
-                    subAmounts.set(i, amount/usersInList );
+                if(isEnabled.get(i)) {
+                    subAmounts.set(i, b.floatValue());
+                    sumBuf += b.floatValue();
+                }
         }
         if (pos!=-1)
             subAmounts.set(pos, 0f);
+
+        if (amount!=sumBuf && firstActive!=-1)
+            subAmounts.set(firstActive, (float) (subAmounts.get(firstActive)+(amount-sumBuf)));
+
+    }
+
+    private int getFirstActive(){
+        for (int i=0;i<isEnabled.size();i++){
+            if (!isEnabled.get(i))
+                continue;
+            else return i;
+        }
+        return -1;
     }
 }
