@@ -344,7 +344,7 @@ public class GroupActivity extends AppCompatActivity {
             x.addPayments(bufPayList);
         }
 
-        if (isOwed){
+
             for (Receipt x : receiptList){
                 if (x.getOwnerId().equals(userId)){
                     for(Payment y : x.getPayments()){
@@ -353,10 +353,7 @@ public class GroupActivity extends AppCompatActivity {
                         }
                     }
                 }
-                x.dropPayments();
             }
-        }
-        else{
             for (Receipt x : receiptList){
                 if (x.getOwnerId().equals(uid)){
                     for (Payment y : x.getPayments()){
@@ -367,7 +364,7 @@ public class GroupActivity extends AppCompatActivity {
                 }
                 x.dropPayments();
             }
-        }
+
     return bufList;
     }
 }
