@@ -80,7 +80,7 @@ public class PayDetailsPop extends Activity {
                 Log.e("detailPop", subAmounts.toString());
             }
         });
-//todo fix business logic
+
         finishBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

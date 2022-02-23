@@ -15,6 +15,9 @@
         <activity android:name=".view.PayDetailsPop">
             android:theme="@style/AppCompat.pop">
         </activity>
+        <activity android:name=".view.ReceiptRelationPop">
+            android:theme="@style/AppCompat.pop">
+        </activity>
         <activity
             android:name=".view.DetailedSplitActivity"
             android:exported="false" />

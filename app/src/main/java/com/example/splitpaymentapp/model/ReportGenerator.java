@@ -34,7 +34,7 @@ public class ReportGenerator {
                     paymentsList.addAll(payments);
 //                Log.e("xd", String.valueOf(paymentsList.size()));
                     addPaymentsToUsers();
-                    IReportGenerated.onGenerated(userBalances);
+                    IReportGenerated.onGenerated(userBalances, paymentsList);
                 }
             });
         }
@@ -99,6 +99,10 @@ public class ReportGenerator {
                 return x;
         }
         return null;
+    }
+
+    public List<Payment> getPaymentsList() {
+        return paymentsList;
     }
 }
 

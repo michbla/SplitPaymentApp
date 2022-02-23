@@ -28,7 +28,8 @@
             android:layout_height="58dp"
             android:ems="10"
             android:hint="0.00"
-            android:inputType="numberDecimal" />
+            android:inputType="numberDecimal"
+            android:textAlignment="viewEnd" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

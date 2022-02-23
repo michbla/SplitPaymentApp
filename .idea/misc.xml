@@ -9,7 +9,7 @@
         <entry key="..\:/Users/Wichau/Documents/GitHub/SplitPaymentApp/app/src/main/res/layout/activity_dashboard.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Wichau/Documents/GitHub/SplitPaymentApp/app/src/main/res/layout/activity_detailed_split.xml" value="0.22" />
         <entry key="..\:/Users/Wichau/Documents/GitHub/SplitPaymentApp/app/src/main/res/layout/activity_equal_pay.xml" value="0.25" />
-        <entry key="..\:/Users/Wichau/Documents/GitHub/SplitPaymentApp/app/src/main/res/layout/activity_group.xml" value="0.5" />
+        <entry key="..\:/Users/Wichau/Documents/GitHub/SplitPaymentApp/app/src/main/res/layout/activity_group.xml" value="0.33" />
         <entry key="..\:/Users/Wichau/Documents/GitHub/SplitPaymentApp/app/src/main/res/layout/activity_login.xml" value="0.2957427536231884" />
         <entry key="..\:/Users/Wichau/Documents/GitHub/SplitPaymentApp/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/Users/Wichau/Documents/GitHub/SplitPaymentApp/app/src/main/res/layout/activity_payment.xml" value="0.25" />
@@ -23,7 +23,8 @@
         <entry key="..\:/Users/Wichau/Documents/GitHub/SplitPaymentApp/app/src/main/res/layout/paydetailspop_layout.xml" value="0.33" />
         <entry key="..\:/Users/Wichau/Documents/GitHub/SplitPaymentApp/app/src/main/res/layout/paymentlist_adapter.xml" value="0.33" />
         <entry key="..\:/Users/Wichau/Documents/GitHub/SplitPaymentApp/app/src/main/res/layout/receiptdatails_adapter.xml" value="0.67" />
-        <entry key="..\:/Users/Wichau/Documents/GitHub/SplitPaymentApp/app/src/main/res/layout/receiptlist_adapter.xml" value="0.67" />
+        <entry key="..\:/Users/Wichau/Documents/GitHub/SplitPaymentApp/app/src/main/res/layout/receiptlist_adapter.xml" value="0.5" />
+        <entry key="..\:/Users/Wichau/Documents/GitHub/SplitPaymentApp/app/src/main/res/layout/receiptrelationpop_layout.xml" value="0.25" />
         <entry key="..\:/Users/Wichau/Documents/GitHub/SplitPaymentApp/app/src/main/res/layout/report_view_adapter.xml" value="0.67" />
       </map>
     </option>

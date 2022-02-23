@@ -65,7 +65,7 @@ public class ReportViewAdapter extends BaseAdapter {
             holder.ReportUserTV.setText(balances.get(position).getUser().getFullName());
             if(balances.get(position).getBalance()<0f){
                 holder.ReportStateTV.setText("czeka na");
-                holder.ReportAmountTV.setText(String.valueOf(Math.abs(balances.get(position).getBalance())));
+                holder.ReportAmountTV.setText(String.format("%.2f", Math.abs(balances.get(position).getBalance())));
             }
             else if (balances.get(position).getBalance()==0f){
                 holder.ReportStateTV.setText("jest rozliczony");
@@ -74,7 +74,7 @@ public class ReportViewAdapter extends BaseAdapter {
             }
             else {
                 holder.ReportStateTV.setText("zalega");
-                holder.ReportAmountTV.setText(String.valueOf(balances.get(position).getBalance()));
+                holder.ReportAmountTV.setText(String.format("%.2f",balances.get(position).getBalance()));
             }
 
         }

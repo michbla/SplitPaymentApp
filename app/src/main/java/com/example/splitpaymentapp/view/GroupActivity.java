@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.example.splitpaymentapp.model.User;
 import com.example.splitpaymentapp.model.UserBalance;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,12 +39,13 @@ public class GroupActivity extends AppCompatActivity {
     Button addExpenseButton;
     Button payDayBtn;
     Button addUserBtn;
+    Button getOwedBtn, getOwedBtn2, getOwedBtn3;
     String userId;
     ReceiptListAdapter adapter;
     ReportViewAdapter reportAdapter;
     private boolean isIncluded = false;
     List<Receipt> receiptList = new ArrayList<>();
-    ArrayList<ArrayList<Payment>> listOfPaymentLists = new ArrayList<>();
+    List<Payment> payments = new ArrayList<>();
     String receiptName, receiptDate;
     float receiptValue;
 
@@ -135,32 +138,35 @@ public class GroupActivity extends AppCompatActivity {
             @Override
             public void onCallback(List<Receipt> list) {
                 receiptList.addAll(list);
-                if (group.getIsFinished() != 1) {
-                    if (list.size() > 0) {
-                        adapter = new ReceiptListAdapter(GroupActivity.this, list);
-                        receiptLV.setAdapter(adapter);
-                        receiptLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                Log.e("groupPosClick", String.valueOf(position));
-                                Intent receiptDetailsIntent = new Intent(GroupActivity.this, ReceiptDetailsActivity.class);
-                                Receipt r = list.get(position);
+                getOwedBtn3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                            if (list.size() > 0) {
+                                noReceiptAlertTV.setText("");
+                                receiptLV.setVisibility(View.VISIBLE);
+                                adapter = new ReceiptListAdapter(GroupActivity.this, list);
+                                receiptLV.setAdapter(adapter);
+                                receiptLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                        Log.e("groupPosClick", String.valueOf(position));
+                                        Intent receiptDetailsIntent = new Intent(GroupActivity.this, ReceiptDetailsActivity.class);
+                                        Receipt r = list.get(position);
 //                        receiptDetailsIntent.putParcelableArrayListExtra("payments", listOfPaymentLists.get(position));
-                                receiptDetailsIntent.putExtra("receipt", r);
-                                receiptDetailsIntent.putParcelableArrayListExtra("users", users);
-                                receiptDetailsIntent.putExtra("userId", userId);
-                                startActivity(receiptDetailsIntent);
+                                        receiptDetailsIntent.putExtra("receipt", (Serializable) r);
+                                        receiptDetailsIntent.putParcelableArrayListExtra("users", users);
+                                        receiptDetailsIntent.putExtra("userId", userId);
+                                        startActivity(receiptDetailsIntent);
+                                    }
+                                });
+                            } else {
+                                receiptLV.setVisibility(View.INVISIBLE);
+                                noReceiptAlertTV.setText("brak paragonów, dodaj pierwszy");
+
                             }
-                        });
-                    } else {
-                        noReceiptAlertTV.setText("brak paragonów, dodaj pierwszy");
 
                     }
-                }
-                else if (group.getIsFinished() == 1){
-                    noReceiptAlertTV.setText("grupa jest rozliczona.");
-                    payDayBtn.setVisibility(Button.VISIBLE);
-                }
+                });
             }
         });
     }
@@ -173,6 +179,9 @@ public class GroupActivity extends AppCompatActivity {
         noReceiptAlertTV = findViewById(R.id.noReceiptAlertTV);
         noReceiptAlertTV.setText("");
         addExpenseButton = findViewById(R.id.addExpenseButton);
+        getOwedBtn = findViewById(R.id.getOwedButton);
+        getOwedBtn2 = findViewById(R.id.getOwedButton2);
+        getOwedBtn3 = findViewById(R.id.getOwedButton3);
         if (!group.getGroupOwner().equals(userId)){
             payDayBtn = (Button) findViewById(R.id.payDayBtn);
             addUserBtn.setVisibility(View.INVISIBLE);
@@ -187,11 +196,12 @@ public class GroupActivity extends AppCompatActivity {
                     addUserBtn.setVisibility(View.INVISIBLE);
                     ReportGenerator rg = new ReportGenerator(receiptList, users, userId, new IReportGenerated() {
                         @Override
-                        public void onGenerated(List<UserBalance> ub) {
+                        public void onGenerated(List<UserBalance> ub, List<Payment> p) {
                             group.setFinished();
                             noReceiptAlertTV.setText("grupa jest rozliczona.");
 //                            payDayBtn.setVisibility(View.INVISIBLE);
 //                            addExpenseButton.setVisibility(View.INVISIBLE);
+                            receiptLV.setVisibility(View.VISIBLE);
                             reportAdapter = new ReportViewAdapter(GroupActivity.this, ub);
                             receiptLV.setAdapter(reportAdapter);
                             receiptLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -213,8 +223,93 @@ public class GroupActivity extends AppCompatActivity {
 
                 }
             });
-        }
 
+        }
+        getOwedBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ReportGenerator rg = new ReportGenerator(receiptList, users, userId, new IReportGenerated() {
+                    @Override
+                    public void onGenerated(List<UserBalance> ub, List<Payment> p) {
+                        List<UserBalance> owedList = new ArrayList<>();
+                        for (UserBalance x : ub){
+                            if (x.getBalance()<0)
+                                owedList.add(x);
+                        }
+                        if (owedList.size()>0) {
+                            receiptLV.setVisibility(View.VISIBLE);
+                            noReceiptAlertTV.setText("");
+                            reportAdapter = new ReportViewAdapter(GroupActivity.this, owedList);
+                            receiptLV.setAdapter(reportAdapter);
+                            receiptLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    Intent intent = new Intent(GroupActivity.this, ReceiptRelationPop.class);
+                                    intent.putExtra("username", owedList.get(position).getUser().getFullName());
+                                    intent.putExtra("userId", userId);
+                                    intent.putParcelableArrayListExtra("users", users);
+                                    List<Receipt> x = getReceiptsFiltered(false, owedList.get(position).getUser().getUid(), p);
+                                    intent.putParcelableArrayListExtra("receipts", (ArrayList<? extends Parcelable>) x);
+                                    startActivity(intent);
+                                    //todo ściągnąć paymenty z raportu i je przefiltrować zamiast ściągać 2 raz
+
+
+                                }
+                            });
+                        }
+                        else{
+                            receiptLV.setVisibility(View.INVISIBLE);
+                            noReceiptAlertTV.setText("jesteś na czysto");
+                        }
+
+
+                    }
+                });
+            }
+        });
+
+
+
+        getOwedBtn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ReportGenerator rg = new ReportGenerator(receiptList, users, userId, new IReportGenerated() {
+                    @Override
+                    public void onGenerated(List<UserBalance> ub, List<Payment> p) {
+                        List<UserBalance> owedList = new ArrayList<>();
+                        for (UserBalance x : ub){
+                            if (x.getBalance()>0)
+                                owedList.add(x);
+                        }
+                        if (owedList.size()>0) {
+                            receiptLV.setVisibility(View.VISIBLE);
+                            noReceiptAlertTV.setText("");
+                            reportAdapter = new ReportViewAdapter(GroupActivity.this, owedList);
+                            receiptLV.setAdapter(reportAdapter);
+                            receiptLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    Intent intent = new Intent(GroupActivity.this, ReceiptRelationPop.class);
+                                    intent.putExtra("username", owedList.get(position).getUser().getFullName());
+                                    intent.putExtra("userId", userId);
+                                    intent.putParcelableArrayListExtra("users", users);
+
+                                    List<Receipt> x = getReceiptsFiltered(true, owedList.get(position).getUser().getUid(), p);
+                                    intent.putParcelableArrayListExtra("receipts", (ArrayList<? extends Parcelable>) x);
+                                    startActivity(intent);
+                                }
+
+                            });
+                        }
+                        else{
+                            receiptLV.setVisibility(View.INVISIBLE);
+                            noReceiptAlertTV.setText("nikt ci nie zalega");
+                        }
+
+                    }
+                });
+            }
+        });
     }
 
     private void readData(GetReceiptsCallBack callBack){
@@ -235,6 +330,46 @@ public class GroupActivity extends AppCompatActivity {
         finish();
     }
 
+
+    private List<Receipt> getReceiptsFiltered(boolean isOwed, String uid, List<Payment> payments){ //true = we paid
+        List<Receipt> bufList = new ArrayList<Receipt>();
+
+        for(Receipt x : receiptList){
+            List<Payment> bufPayList = new ArrayList<Payment>();
+            for (Payment y: payments){
+                if (y.getReceiptId().equals(x.getId())){
+                    bufPayList.add(y);
+                }
+            }
+            x.addPayments(bufPayList);
+        }
+
+        if (isOwed){
+            for (Receipt x : receiptList){
+                if (x.getOwnerId().equals(userId)){
+                    for(Payment y : x.getPayments()){
+                        if (y.getPaymentTo().equals(uid)){
+                            bufList.add(x);
+                        }
+                    }
+                }
+                x.dropPayments();
+            }
+        }
+        else{
+            for (Receipt x : receiptList){
+                if (x.getOwnerId().equals(uid)){
+                    for (Payment y : x.getPayments()){
+                        if (y.getPaymentTo().equals(userId)){
+                            bufList.add(x);
+                        }
+                    }
+                }
+                x.dropPayments();
+            }
+        }
+    return bufList;
+    }
 }
 
 interface GetReceiptsCallBack{

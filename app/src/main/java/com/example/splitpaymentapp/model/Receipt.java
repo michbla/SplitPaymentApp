@@ -1,10 +1,13 @@
 package com.example.splitpaymentapp.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Receipt implements Serializable {
+public class Receipt implements Serializable, Parcelable {
     private String name;
     private String ownerId;
     private String date;
@@ -47,6 +50,29 @@ public class Receipt implements Serializable {
         }
     }
 
+    protected Receipt(Parcel in) {
+        name = in.readString();
+        ownerId = in.readString();
+        date = in.readString();
+        id = in.readString();
+        groupId = in.readString();
+        amount = in.readFloat();
+        paymentIds = in.createStringArrayList();
+        payments = in.createTypedArrayList(Payment.CREATOR);
+    }
+
+    public static final Creator<Receipt> CREATOR = new Creator<Receipt>() {
+        @Override
+        public Receipt createFromParcel(Parcel in) {
+            return new Receipt(in);
+        }
+
+        @Override
+        public Receipt[] newArray(int size) {
+            return new Receipt[size];
+        }
+    };
+
     public String getId() {
         return id;
     }
@@ -81,6 +107,28 @@ public class Receipt implements Serializable {
 
     public void addPayments(List<Payment> payments){
         this.payments.addAll(payments);
+    }
+
+    public void dropPayments(){
+        this.payments.clear();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeString(name);
+        dest.writeString(ownerId);
+        dest.writeString(date);
+        dest.writeString(id);
+        dest.writeString(groupId);
+        dest.writeFloat(amount);
+        dest.writeStringList(paymentIds);
+        dest.writeTypedList(payments);
     }
 }
 
