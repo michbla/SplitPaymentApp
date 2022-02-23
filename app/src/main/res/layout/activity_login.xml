@@ -8,12 +8,17 @@
         tools:context=".view.LoginActivity">
 
     <TextView
-            android:text="Sign in"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/textView3"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.144" android:textSize="48sp" tools:text="Sign in"/>
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Zaloguj się"
+        android:textSize="48sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.144"
+        tools:text="Zaloguj się" />
     <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -23,36 +28,49 @@
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintVertical_bias="0.309" android:hint="email"/>
+
     <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:ems="10"
-            android:id="@+id/passwordFieldLogin"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.406" android:hint="password"/>
+        android:id="@+id/passwordFieldLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="hasło"
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.406" />
+
     <Button
-            android:text="Sign in"
-            android:layout_width="135dp"
-            android:layout_height="48dp" android:id="@+id/loginButton"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.546"/>
+        android:id="@+id/loginButton"
+        android:layout_width="135dp"
+        android:layout_height="48dp"
+        android:text="Zaloguj się"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.546" />
+
     <TextView
-            android:text="Forgot password?"
-            android:layout_width="104dp"
-            android:layout_height="17dp" android:id="@+id/forgotPassButton"
-            android:textSize="12sp" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.322"
-            app:layout_constraintVertical_bias="0.47"/>
+        android:id="@+id/forgotPassButton"
+        android:layout_width="137dp"
+        android:layout_height="18dp"
+        android:text="zapomniałeś hasła?"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.368"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.472" />
 
     <TextView
         android:id="@+id/alternateSignUpButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Don't have account? Sign up now"
+        android:text="Nie masz konta? Zarejestruj się"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -8,9 +8,9 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="206dp"
-        android:layout_height="67dp"
-        android:text="Sign up"
+        android:layout_width="271dp"
+        android:layout_height="69dp"
+        android:text="Rejestracja"
         android:textAlignment="center"
         android:textSize="48sp"
         android:textStyle="bold"
@@ -25,7 +25,7 @@
         android:id="@+id/textView2"
         android:layout_width="200dp"
         android:layout_height="28dp"
-        android:text="Create new Account"
+        android:text="Stwórz nowe konto"
         android:textAlignment="center"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -39,7 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Full name"
+        android:hint="Nazwa"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -64,13 +64,12 @@
         app:layout_constraintVertical_bias="0.384" />
 
 
-
     <EditText
         android:id="@+id/passwdFieldRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="password"
+        android:hint="hasło"
         android:inputType="textPassword"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -84,7 +83,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="confirm password"
+        android:hint="powtórz hasło"
         android:inputType="textPassword"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -97,7 +96,7 @@
         android:id="@+id/registerButton"
         android:layout_width="208dp"
         android:layout_height="43dp"
-        android:text="Sign up"
+        android:text="Zarejestruj"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -108,7 +107,7 @@
         android:id="@+id/alternateLoginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Already have an account? Sign in here"
+        android:text="Masz już konto? Zaloguj się"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
