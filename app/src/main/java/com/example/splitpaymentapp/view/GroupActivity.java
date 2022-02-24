@@ -48,7 +48,7 @@ public class GroupActivity extends AppCompatActivity {
     List<Payment> payments = new ArrayList<>();
     String receiptName, receiptDate;
     float receiptValue;
-
+ // płatności przy paragonach (dodatkowa kolumna)
 
 
     @Override
